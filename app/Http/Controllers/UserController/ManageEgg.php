@@ -1,20 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\AdminController;
+namespace App\Http\Controllers\UserController;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
-use Inertia\Response;
 
-class AdminController extends Controller
+class ManageEgg extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return Inertia::render('Admin/Dashboard');
+        //
     }
 
     /**
@@ -64,10 +62,4 @@ class AdminController extends Controller
     {
         //
     }
-
-    public function records()
-    {
-        return Inertia::render('Admin/Records');
-    }
-    
 }
