@@ -69,4 +69,8 @@ class AdminController extends Controller
     {
         return Inertia::render('Admin/Records');
     }
+    public function createbatch()
+    {
+        return Inertia::render('Admin/CreateBatch');
+    }
 }

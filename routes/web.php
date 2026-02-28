@@ -25,6 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
         Route::get('/records', [AdminController::class, 'records'])->name('records');
+        Route::get('/createbatch', [AdminController::class, 'createbatch'])->name('createbatch');
     });
     //Super Admin
      Route::middleware(['role:superadmin'])->prefix('superadmin')->name('superadmin.')->group(function () {
