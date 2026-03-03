@@ -4,17 +4,21 @@ namespace App\Http\Controllers\AdminController;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Batch;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class AdminController extends Controller
+class BatchController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return Inertia::render('Admin/Dashboard');
+        //
+        return Inertia::render('Admin/CreateBatch', [
+    'batches' => Batch::latest()->get(),
+]);
     }
 
     /**
@@ -31,6 +35,15 @@ class AdminController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+        'name' => 'required|string|max:255',
+        'section' => 'required|integer|min:1',
+        'date' => 'required|date',
+        ]);
+
+        Batch::create($request->only('name', 'section', 'date'));
+
+        return redirect()->back();
     }
 
     /**
@@ -52,22 +65,26 @@ class AdminController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Batch $batch)
     {
         //
+        $request->validate([
+        'name' => 'required|string|max:255',
+        'section' => 'required|integer|min:1',
+        'date' => 'required|date',
+        ]);
+
+        $batch->update($request->only('name', 'section', 'date'));
+
+        return redirect()->back();
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Batch $batch)
     {
-        //
+        $batch->delete();
+        return redirect()->back();
     }
-
-    public function records()
-    {
-        return Inertia::render('Admin/Records');
-    }
-    
 }

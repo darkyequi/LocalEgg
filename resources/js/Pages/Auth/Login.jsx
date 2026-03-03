@@ -31,7 +31,7 @@ export default function Login({ status, canResetPassword }) {
                 </div>
             )}
 
-            <form onSubmit={submit}>
+            <form onSubmit={submit} >
                 <div>
                     <InputLabel htmlFor="email" value="Email" />
 
@@ -65,7 +65,7 @@ export default function Login({ status, canResetPassword }) {
                     <InputError message={errors.password} className="mt-2" />
                 </div>
 
-                <div className="mt-4 block">
+                <div className="mt-4 flex justify-between">
                     <label className="flex items-center">
                         <Checkbox
                             name="remember"
@@ -74,25 +74,37 @@ export default function Login({ status, canResetPassword }) {
                                 setData('remember', e.target.checked)
                             }
                         />
-                        <span className="ms-2 text-sm text-gray-600">
+                        <span className="ms-2 text-xs text-gray-600">
                             Remember me
                         </span>
+                        
                     </label>
-                </div>
-
-                <div className="mt-4 flex items-center justify-end">
                     {canResetPassword && (
                         <Link
                             href={route('password.request')}
-                            className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            className="no-underline rounded-md text-xs text-gray-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                         >
                             Forgot your password?
                         </Link>
                     )}
-
-                    <PrimaryButton className="ms-4" disabled={processing}>
+                    
+                </div>
+                <div className='mt-4 flex justify-center w-full'>
+                    <PrimaryButton className=" w-full h-full" disabled={processing}>
                         Log in
                     </PrimaryButton>
+                </div>
+                <div className="mt-4 flex justify-center">
+                    <span className='text-sm'>
+                        Don't Have Account? 
+                        <span> </span>
+                        <Link 
+                            href={route('register')}
+                            className="rounded-md text-sm text-gray-600 no-underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            >
+                            Sign Up Here
+                        </Link>
+                    </span>
                 </div>
             </form>
         </GuestLayout>

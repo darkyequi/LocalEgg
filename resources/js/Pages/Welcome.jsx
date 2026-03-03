@@ -1,5 +1,7 @@
 import { Head, Link } from '@inertiajs/react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
+import welcome from '../../../public/images/welcome.png';
+
 
 export default function Welcome({ auth, laravelVersion, phpVersion }) {
     const handleImageError = () => {
@@ -18,12 +20,12 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
             <Head title="Welcome" />
             <div >
                 <div className="relative flex min-h-screen flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white">
-                    <div className="relative w-full max-w-2xl px-6 lg:max-w-7xl">
+                    <div className="relative w-full px-6 lg:max-w-7xl">
                         <header className="flex justify-between gap-2 py-5">
                             <div className="flex lg:col-start-2 lg:justify-center">
-                                <ApplicationLogo className="w-16 h-16" />
+                                <ApplicationLogo className="w-26 h-16" />
                             </div>
-                            <nav className="-mx-3 gap-2 flex flex-1 items-center justify-end">
+                            <nav className="-mx-3 gap-1 flex flex-1 items-center justify-end">
                                 {auth.user ? (
                                     auth.user.role === "superadmin" ? (
                                         <Link href={route('superadmin.dashboard')}>
@@ -63,7 +65,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
 
                         <main className="mt-6">
                             <div className="flex flex-col items-center justify-center">
-                                <h1 className='font-semibold text-6xl text-center'>
+                                <h1 className='font-semibold text-4xl md:text-6xl text-center'>
                                     The smart way to
                                     <br />
                                     <span className="text-green-600">
@@ -82,34 +84,43 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                                     </Link>
                                </button>
                             </div>
-                            <div className='flex gap-6 mt-20 flex-wrap justify-center lg:justify-start'>
-                                <div className='flex-1 h-auto rounded-[60px] shadow-md p-5 bg-green-600'>
-                                    Hello
+                            <div className='flex gap-6 w-full mt-20 flex-wrap justify-center md:justify-start'>
+                                <div className='w-full  bg-[url("images/background-nest.png")] md:bg-auto flex-1 h-[600px] rounded-[60px] shadow-md p-5 justify-start items-center border-2 md:w-3/5 md:h-auto'>
+                                    <h1 className='md:text-4xl text-xl font-semibold p-5 text-green-800'>Innovate your Poultry Farm</h1>
+                                    <div className='place-items-center overflow-hidden md:flex md:mt-7 md:gap-5'>
+                                        <img src={welcome} alt="Welcome" className=" w-44 h-44 rounded-[60px] sm:w-96 sm:h-96 "></img>
+                                        <p className='text-center'>Lorem ipsum dolor sit amet consectetur adipisicing elit. At consectetur delectus repellat ullam, recusandae consequuntur ducimus incidunt illo quia veniam fugit id quaerat doloribus architecto officia exercitationem ea? Cumque, dolorum!Improve your poultry farm operations with our smart inventory management system.</p>
+                                    </div>
                                 </div>
-                                <div className=' flex flex-col gap-3 w-1/2 lg:w-2/5'>
-                                        <div className='bg-yellow-500 rounded-[50px] w-full h-80 flex items-center justify-center' id='background'>
-                                            <h1>
-                                                Dashboard
+                                <div className='w-full flex flex-2 flex-col gap-3 md:w-2/5'>
+                                        <div className='items-center justify-center text-white bg-green-500 bg-opacity-90 rounded-[50px] w-full h-64 shadow-md border-2 p-7 md:h-80'>
+                                            <ApplicationLogo className="w-34 h-24 mx-auto hidden sm:block"/>
+                                            <h1 className='text-3xl font-semibold'>
+                                                <a href="" className='text-4xl sm:text-3xl'><i class="fa-solid fa-egg"></i></a> Inventory Management
                                             </h1>
+                                            <br />
+                                            <p className=''>Track and manage your egg inventory with ease. Help grow your poultry business efficiently.</p>
                                         </div>
-                                    <div className='flex gap-3'>
-                                        <div className='bg-yellow-500 rounded-[40px] w-auto h-64 flex items-center justify-center lg:w-full' id='screenshot-container'>
-                                            <h1>
-                                                Record
+                                    <div className='flex flex-wrap gap-3 md:flex-nowrap'>
+                                        <div className='bg-green-800 rounded-[40px] text-white w-full h-48 p-7 items-center justify-center md:w-full md:h-64'>
+                                            <h1 className='text-3xl font-semibold'>
+                                                <a href=""><i class="fa-regular fa-clipboard"></i></a><br />Record
                                             </h1>
+                                            <p>Record your daily egg inventory details.</p>
                                         </div> 
-                                        <div className='bg-yellow-500 rounded-[40px] w-auto h-64 flex items-center justify-center lg:w-3/4' id='screenshot-container'>
-                                            <h1>
-                                                Record
+                                        <div className='bg-green-200 rounded-[40px] w-full h-48 p-7 items-center justify-center md:w-2/3 md:h-64'>
+                                            <h1 className='text-3xl font-semibold'>
+                                                <a href=""><i class="fa-solid fa-chart-simple"></i></a><br />Metrics
                                             </h1>
+                                            <p>View and analyze your egg inventory data.</p>
                                         </div> 
                                     </div>
                                 </div>
                             </div>
                         </main>
 
-                        <footer className="py-16 text-center text-sm text-black dark:text-white/70">
-                            
+                        <footer className="py-16 text-center text-sm text-black">
+                            @LocalEgg 2026. All rights reserved.
                         </footer>
                     </div>
                 </div>
