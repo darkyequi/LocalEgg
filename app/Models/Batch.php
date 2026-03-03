@@ -14,4 +14,7 @@ class Batch extends Model
         'section',
         'date',
     ];
+    public function manageEggs() {
+        return $this->hasMany(ManageEgg::class);
+    }
 }

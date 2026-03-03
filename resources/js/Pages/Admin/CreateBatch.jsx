@@ -109,7 +109,7 @@ export default function CreateBatch({ batches }) {
                     <div>
                         <div className="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-8">
                              {[...batches]
-                                .sort((a, b) => Number(a.name) - Number(b.name))
+                                .sort((a, b) => Number(a.name.replace(/\D/g, "")) - Number(b.name.replace(/\D/g, "")))
                                 .map(batch => (
                                 <div key ={batch.id}className='py-5 px-5 rounded-3xl shadow-md border-2'>
                                     <div>

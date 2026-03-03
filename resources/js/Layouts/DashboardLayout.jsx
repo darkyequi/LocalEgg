@@ -2,10 +2,23 @@ import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
-import { Link, usePage } from '@inertiajs/react';
-import { useState } from 'react';
+import { Link, usePage, router, } from '@inertiajs/react';
+import { useState, useEffect } from 'react';
 
 export default function AuthenticatedLayout({ header, children }) {
+
+    useEffect(() => {
+    const interval = setInterval(() => {
+        router.reload({
+            only: ['batches'], // reload only batches from backend
+            preserveScroll: true,
+            preserveState: true,
+        });
+    }, 60000); // 5000ms = 5 seconds
+
+    return () => clearInterval(interval); // cleanup when component unmounts
+}, []);
+
     const user = usePage().props.auth.user;
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
@@ -26,7 +39,7 @@ export default function AuthenticatedLayout({ header, children }) {
 
     const isUser = [
         { name: 'Homepage', href: 'user.homepage' },
-        { name: 'Inventory', href: 'user.inventory' },
+        { name: 'Inventory', href: 'user.manageegg' },
     ]
     const isAdmin = [
         { name: 'Dashboard', href: 'admin.dashboard' },

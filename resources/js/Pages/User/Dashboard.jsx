@@ -47,56 +47,26 @@ const usermetrics = [
         value: 200,
     },
 ]
-const metrics = [
-    {
-        id: 1,
-        name: 'Total Eggs',
-        value: 300,
-    },
-    {
-        id: 2,
-        name: 'Total Pullet',
-        value: 500,
-    },
-    {
-        id: 3,
-        name: 'Total Small',
-        value: 300,
-    },
-    {
-        id: 4,
-        name: 'Total Medium',
-        value: 200,
-    },
-    {
-        id: 5,
-        name: 'Total Large',
-        value: 100,
-    },
-    {
-        id: 6,
-        name: 'Total XL',
-        value: 50,
-    },
-    {
-        id: 7,
-        name: 'Total Jumbo',
-        value: 10,
-    },
-    {
-        id: 8,
-        name: 'Total Broken',
-        value: 5,
-    }
-]   
 
-export default function Dashboard() {
+
+
+export default function Dashboard({totals}) {
     const [isShow, setIsShow] = useState(false);
     const [selectedBatch, setSelectedBatch] = useState(null);
     const openModal = (batch) => {
             setSelectedBatch(batch);
             setIsShow(true);
         }
+    const metrics = [
+        { id: 1, name: 'Total Eggs', value: totals?.total_eggs || 0 },
+        { id: 2, name: 'Total Pullet', value: totals?.pullet || 0 },
+        { id: 3, name: 'Total Small', value: totals?.small || 0 },
+        { id: 4, name: 'Total Medium', value: totals?.medium || 0 },
+        { id: 5, name: 'Total Large', value: totals?.large || 0 },
+        { id: 6, name: 'Total XL', value: totals?.extra_large || 0 },
+        { id: 7, name: 'Total Jumbo', value: totals?.jumbo || 0 },
+        { id: 8, name: 'Total Broken', value: totals?.broken || 0 },
+    ];
     return (
         <AuthenticatedLayout
             header={
@@ -138,7 +108,7 @@ export default function Dashboard() {
                                 </div>
                             ))}
                         </div>
-                        <div className=' w-full mt-8 flex flex-col flex-wrap justify-center'>
+                        {/* <div className=' w-full mt-8 flex flex-col flex-wrap justify-center'>
                             <h1 className='text-center text-green-700 text-6xl font-semibold'>Batches</h1>
                             <div className='w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4 mt-8'>
                                 {batches.map(batch => (
@@ -158,7 +128,7 @@ export default function Dashboard() {
                                 </div>
                                 ))}
                             </div>
-                        </div>
+                        </div> */}
                 </div>
                     <Modal show={isShow} onClose={() => setIsShow(false)}>
                         <div className="p-7">

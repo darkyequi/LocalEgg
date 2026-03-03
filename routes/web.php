@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController\AdminController;
 use App\Http\Controllers\UserController\UserController;
+use App\Http\Controllers\UserController\ManageEggController;
 use App\Http\Controllers\SuperAdminController\SuperAdminController;
 use App\Http\Controllers\AdminController\BatchController;
 use Illuminate\Foundation\Application;
@@ -20,7 +21,9 @@ Route::middleware('auth')->group(function () {
     //User
     Route::middleware(['role:user'])->prefix('user')->name('user.')->group(function () {
         Route::get('/homepage', [UserController::class, 'index'])->name('homepage');
-        Route::get('/inventory', [UserController::class, 'inventory'])->name('inventory');
+        Route::get('/manage_egg', [ManageEggController::class, 'index'])->name('manageegg');
+        Route::post('/manage_egg/{batch}', [ManageEggController::class, 'store'])->name('manageegg.store');
+        Route::put('/manage_egg/{batch}', [ManageEggController::class, 'update'])->name('manageegg.update');
     });
     //Admin
     Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
