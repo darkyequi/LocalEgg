@@ -118,7 +118,7 @@ export default function CreateBatch({ batches }) {
                                         </h1>
                                         <div className='flex flex-col items-center'>
                                             <img src={itlog} alt='itlog' className='w-20 h-20 sm:w-40 sm:h-40 mb-5'/>
-                                            <PrimaryButton onClick={() => openEditModal(batch)} className="rounded-[80px] text-[10px] sm:text-xs">
+                                            <PrimaryButton onClick={() => openEditModal(batch)} className="rounded-[80px] text-[9px] sm:text-xs">
                                                 Edit Batch
                                             </PrimaryButton>
                                         </div>

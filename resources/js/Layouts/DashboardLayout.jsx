@@ -1,226 +1,167 @@
-import ApplicationLogo from '@/Components/ApplicationLogo';
-import Dropdown from '@/Components/Dropdown';
-import NavLink from '@/Components/NavLink';
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
-import { Link, usePage, router, } from '@inertiajs/react';
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { Link, usePage } from '@inertiajs/react';
 
-export default function AuthenticatedLayout({ header, children }) {
+export default function DashboardLayout({ children, title }) {
 
-    useEffect(() => {
-    const interval = setInterval(() => {
-        router.reload({
-            only: ['batches'], // reload only batches from backend
-            preserveScroll: true,
-            preserveState: true,
-        });
-    }, 60000); // 5000ms = 5 seconds
+    const { auth } = usePage().props;
+    const user = auth.user;
 
-    return () => clearInterval(interval); // cleanup when component unmounts
-}, []);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-    const user = usePage().props.auth.user;
+    const userRole = user?.role;
 
-    const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
-
-    const routeDashboard =
-        user.role === 'superadmin'
-        ? route('superadmin.dashboard')
-        : user.role === 'admin'
-        ? route('admin.dashboard')
-        : route ('user.homepage');
-    
-    const isDashboard =
-        user.role === 'superadmin'
-        ? route('superadmin.dashboard')
-        : user.role === 'admin'
-        ? route('admin.dashboard')
-        : route ('user.homepage');
-
-    const isUser = [
+    const userNav = [
         { name: 'Homepage', href: 'user.homepage' },
-        { name: 'Inventory', href: 'user.manageegg' },
-    ]
-    const isAdmin = [
+        { name: 'Manage Egg', href: 'user.manageegg' },
+    ];
+
+    const adminNav = [
         { name: 'Dashboard', href: 'admin.dashboard' },
         { name: 'Records', href: 'admin.records' },
         { name: 'Create Batches', href: 'admin.createbatch' },
-    ]
-    const isSuperAdmin = [
+    ];
+
+    const superAdminNav = [
         { name: 'Dashboard', href: 'superadmin.dashboard' },
         { name: 'History', href: 'superadmin.history' },
-    ]
+    ];
 
-    const navigationLinks = user.role === 'superadmin' ? isSuperAdmin : user.role === 'admin' ? isAdmin : isUser;
+    const navigation =
+        userRole === 'superadmin'
+            ? superAdminNav
+            : userRole === 'admin'
+            ? adminNav
+            : userNav;
 
     return (
-        <div className="min-h-screen bg-gray-100">
-            <nav className="border-b border-gray-100 bg-white">
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className="flex h-16 justify-between">
-                        <div className="flex">
-                            <div className="flex shrink-0 items-center">
-                                <Link href="/">
-                                    <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
-                                </Link>
-                            </div>
+        <div className="flex min-h-screen bg-gray-100">
 
-                        </div>
-
-                        <div className="hidden sm:ms-6 sm:flex sm:items-center">
-                            <div className="relative ms-3">
-                                <Dropdown>
-                                    <Dropdown.Trigger>
-                                        <span className="inline-flex rounded-md">
-                                            <button
-                                                type="button"
-                                                className="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
-                                            >
-                                                {user.name}
-
-                                                <svg
-                                                    className="-me-0.5 ms-2 h-4 w-4"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 20 20"
-                                                    fill="currentColor"
-                                                >
-                                                    <path
-                                                        fillRule="evenodd"
-                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                        clipRule="evenodd"
-                                                    />
-                                                </svg>
-                                            </button>
-                                        </span>
-                                    </Dropdown.Trigger>
-
-                                    <Dropdown.Content>
-                                        <Dropdown.Link
-                                            href={route('profile.edit')}
-                                        >
-                                            Profile
-                                        </Dropdown.Link>
-                                        <Dropdown.Link
-                                            href={route('logout')}
-                                            method="post"
-                                            as="button"
-                                        >
-                                            Log Out
-                                        </Dropdown.Link>
-                                    </Dropdown.Content>
-                                </Dropdown>
-                            </div>
-                        </div>
-
-                        <div className="-me-2 flex items-center sm:hidden">
-                            <button
-                                onClick={() =>
-                                    setShowingNavigationDropdown(
-                                        (previousState) => !previousState,
-                                    )
-                                }
-                                className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none"
-                            >
-                                <svg
-                                    className="h-6 w-6"
-                                    stroke="currentColor"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        className={
-                                            !showingNavigationDropdown
-                                                ? 'inline-flex'
-                                                : 'hidden'
-                                        }
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M4 6h16M4 12h16M4 18h16"
-                                    />
-                                    <path
-                                        className={
-                                            showingNavigationDropdown
-                                                ? 'inline-flex'
-                                                : 'hidden'
-                                        }
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
+            {/* MOBILE OVERLAY */}
+            {isMobileMenuOpen && (
                 <div
-                    className={
-                        (showingNavigationDropdown ? 'block' : 'hidden') +
-                        ' sm:hidden'
-                    }
-                >
-                    <div className="space-y-1 pb-3 pt-2">
-                        {navigationLinks.map((item) => (
-                            <ResponsiveNavLink
-                                key={item.name}
-                                href={route(item.href)}
-                                active={route().current(item.href)}
-                            >
-                                {item.name}
-                            </ResponsiveNavLink>
-                        ))}
-                    </div>
-
-                    <div className="border-t border-gray-200 pb-1 pt-4">
-                        <div className="px-4">
-                            <div className="text-base font-medium text-gray-800">
-                                {user.name}
-                            </div>
-                            <div className="text-sm font-medium text-gray-500">
-                                {user.email}
-                            </div>
-                        </div>
-
-                        <div className="mt-3 space-y-1">
-                            <ResponsiveNavLink href={route('profile.edit')}>
-                                Profile
-                            </ResponsiveNavLink>
-                            <ResponsiveNavLink
-                                method="post"
-                                href={route('logout')}
-                                as="button"
-                            >
-                                Log Out
-                            </ResponsiveNavLink>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-
-            {header && (
-                <header className="bg-white shadow">
-                    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                        <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                {navigationLinks.map((item) => (
-                                    <NavLink
-                                        key={item.name}
-                                        href={route(item.href)}
-                                        active={route().current(item.href)}
-                                    >
-                                        {item.name}
-                                    </NavLink>
-                                ))}
-                        </div>
-                        <h1 className='sm:hidden'>
-                            {header}
-                        </h1>
-                    </div>
-                </header>
+                    className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                />
             )}
 
-            <main className='px-7 lg:px-40'>{children}</main>
+            {/* SIDEBAR */}
+            <aside
+                className={`fixed inset-y-0 left-0 z-50 w-64 bg-white border-r transform transition-transform duration-300 
+                ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} 
+                lg:translate-x-0 lg:static flex flex-col`}
+            >
+
+                {/* LOGO */}
+                <div className="p-6 flex justify-between items-center border-b">
+                    <Link href={route(`${userRole}.dashboard`)}>
+                        <span className="text-xl font-bold">EggTrack</span>
+                    </Link>
+
+                    <button
+                        className="lg:hidden"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                        ✕
+                    </button>
+                </div>
+
+                {/* NAVIGATION */}
+                <nav className="flex-1 p-4 space-y-2">
+
+                    {navigation.map((item) => (
+                        <NavLink
+                            key={item.name}
+                            href={route(item.href)}
+                            active={route().current(item.href)}
+                            onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                            {item.name}
+                        </NavLink>
+                    ))}
+
+                </nav>
+
+                {/* PROFILE */}
+                <div className="p-4 border-t bg-gray-50">
+
+                    <Link
+                        href={route('profile.edit')}
+                        className="flex items-center gap-3 p-3 rounded-lg bg-white border hover:border-orange-400"
+                    >
+
+                        <div className="w-10 h-10 flex items-center justify-center rounded-full bg-orange-500 text-white font-bold">
+                            {user?.name?.charAt(0).toUpperCase()}
+                        </div>
+
+                        <div>
+                            <p className="text-sm font-semibold">
+                                {user?.name}
+                            </p>
+
+                            <p className="text-xs text-orange-500 uppercase font-bold">
+                                {userRole}
+                            </p>
+                        </div>
+
+                    </Link>
+
+                </div>
+            </aside>
+
+            {/* MAIN CONTENT */}
+            <div className="flex-1 flex flex-col">
+
+                {/* HEADER */}
+                <header className="h-16 bg-white border-b flex items-center justify-between px-6">
+
+                    <div className="flex items-center gap-4">
+
+                        <button
+                            className="lg:hidden"
+                            onClick={() => setIsMobileMenuOpen(true)}
+                        >
+                            ☰
+                        </button>
+
+                        <h1 className="font-bold text-lg">
+                            {title}
+                        </h1>
+
+                    </div>
+
+                    <Link
+                        href={route('logout')}
+                        method="post"
+                        as="button"
+                        className="text-red-500 font-semibold"
+                    >
+                        Logout
+                    </Link>
+
+                </header>
+
+                {/* PAGE CONTENT */}
+                <main className="p-6 flex-1">
+                    {children}
+                </main>
+
+            </div>
         </div>
+    );
+}
+
+function NavLink({ href, active, children, onClick }) {
+    return (
+        <Link
+            href={href}
+            onClick={onClick}
+            className={`block px-4 py-3 rounded-lg transition
+                ${active
+                    ? 'bg-orange-500 text-white font-bold'
+                    : 'text-gray-700 hover:bg-gray-200'}
+            `}
+        >
+            {children}
+        </Link>
     );
 }

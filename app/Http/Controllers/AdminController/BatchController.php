@@ -17,7 +17,7 @@ class BatchController extends Controller
     {
         //
         return Inertia::render('Admin/CreateBatch', [
-    'batches' => Batch::latest()->get(),
+        'batches' => Batch::latest()->get(),
 ]);
     }
 

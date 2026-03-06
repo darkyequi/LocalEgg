@@ -20,6 +20,7 @@ class ManageEgg extends Model
         'extra_large',
         'jumbo',
         'broken',
+        'chicken_death',
     ];
     public function batch()
     {

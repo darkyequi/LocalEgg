@@ -14,8 +14,7 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
+    public function index() {
         $totals = [
         'pullet' => ManageEgg::sum('pullet'),
         'small' => ManageEgg::sum('small'),
@@ -24,23 +23,50 @@ class UserController extends Controller
         'extra_large' => ManageEgg::sum('extra_large'),
         'jumbo' => ManageEgg::sum('jumbo'),
         'broken' => ManageEgg::sum('broken'),
+        'chicken_death' => ManageEgg::sum('chicken_death'),
     ];
     $batches = Batch::with('manageEggs')->get()->map(function($batch) {
-    $batch->total_eggs = $batch->manageEggs->sum('pullet')
-        + $batch->manageEggs->sum('small')
-        + $batch->manageEggs->sum('medium')
-        + $batch->manageEggs->sum('large')
-        + $batch->manageEggs->sum('extra_large')
-        + $batch->manageEggs->sum('jumbo')
-        + $batch->manageEggs->sum('broken');
-});
-    $section = 
+
+        // Total eggs per batch
+        $batch->total_eggs =
+            $batch->manageEggs->sum('pullet') +
+            $batch->manageEggs->sum('small') +
+            $batch->manageEggs->sum('medium') +
+            $batch->manageEggs->sum('large') +
+            $batch->manageEggs->sum('extra_large') +
+            $batch->manageEggs->sum('jumbo') +
+            $batch->manageEggs->sum('broken');
+
+        // Group by section
+        $batch->sections = $batch->manageEggs
+            ->groupBy('section')
+            ->map(function ($items, $sectionName) {
+
+                return [
+                    'id' => $sectionName,
+                    'name' => $sectionName,
+                    'total_eggs' =>
+                        $items->sum('pullet') +
+                        $items->sum('small') +
+                        $items->sum('medium') +
+                        $items->sum('large') +
+                        $items->sum('extra_large') +
+                        $items->sum('jumbo') +
+                        $items->sum('broken'),
+                ];
+            })
+            ->values(); // important to make it array
+
+        return $batch;
+    });
+
+    
     // total of all eggs
     $totals['total_eggs'] = array_sum($totals);
 
     return Inertia::render('User/Dashboard', [
         'totals' => $totals,
-        'batches' => $batches
+        'batches' => $batches,
     ]);
     }
 

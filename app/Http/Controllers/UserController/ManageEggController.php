@@ -38,6 +38,7 @@ class ManageEggController extends Controller
                     'extra_large' => $egg->extra_large,
                     'jumbo' => $egg->jumbo,
                     'broken' => $egg->broken,
+                    'chicken_death' => $egg->chicken_death,
                 ];
             }
             $batch->sections = $sections;
@@ -79,6 +80,7 @@ class ManageEggController extends Controller
             'extra_large' => $helo['extra_large'] ?? 0,
             'jumbo' => $helo['jumbo'] ?? 0,
             'broken' => $helo['broken'] ?? 0,
+            'chicken_death' => $helo['chicken_death'] ?? 0,
         ]);
     }
 
@@ -117,6 +119,7 @@ class ManageEggController extends Controller
             [
                 'batch_id' => $batchId,
                 'section' => $sectionName,
+                'created_at' => now()->toDateString(),
             ],
             [
                 'pullet' => $helo['pullet'] ?? 0,
@@ -126,6 +129,7 @@ class ManageEggController extends Controller
                 'extra_large' => $helo['extra_large'] ?? 0,
                 'jumbo' => $helo['jumbo'] ?? 0,
                 'broken' => $helo['broken'] ?? 0,
+                'chicken_death' => $helo['chicken_death'] ?? 0,
             ]
         );
     }
