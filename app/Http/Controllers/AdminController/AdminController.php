@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Batch;
 use App\Models\ManageEgg;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\DB;
 use Inertia\Response;
 
 class AdminController extends Controller
@@ -15,58 +16,52 @@ class AdminController extends Controller
      * Display a listing of the resource.
      */
     public function index() {
-        $totals = [
-        'pullet' => ManageEgg::sum('pullet'),
-        'small' => ManageEgg::sum('small'),
-        'medium' => ManageEgg::sum('medium'),
-        'large' => ManageEgg::sum('large'),
-        'extra_large' => ManageEgg::sum('extra_large'),
-        'jumbo' => ManageEgg::sum('jumbo'),
-        'broken' => ManageEgg::sum('broken'),
-        'chicken_death' => ManageEgg::sum('chicken_death'),
-    ];
-    $batches = Batch::with('manageEggs')->get()->map(function($batch) {
+       // totals per year
+    $totalsByYear = ManageEgg::select(
+        DB::raw('YEAR(created_at) as year'),
+        DB::raw('SUM(pullet) as pullet'),
+        DB::raw('SUM(small) as small'),
+        DB::raw('SUM(medium) as medium'),
+        DB::raw('SUM(large) as large'),
+        DB::raw('SUM(extra_large) as extra_large'),
+        DB::raw('SUM(jumbo) as jumbo'),
+        DB::raw('SUM(broken) as broken'),
+        DB::raw('SUM(chicken_death) as chicken_death')
+    )
+    ->groupBy('year')
+    ->get()
+    ->map(function ($item) {
+        $item->total_eggs =
+            $item->pullet +
+            $item->small +
+            $item->medium +
+            $item->large +
+            $item->extra_large +
+            $item->jumbo +
+            $item->broken;
 
-        // Total eggs per batch
-        $batch->total_eggs =
-            $batch->manageEggs->sum('pullet') +
-            $batch->manageEggs->sum('small') +
-            $batch->manageEggs->sum('medium') +
-            $batch->manageEggs->sum('large') +
-            $batch->manageEggs->sum('extra_large') +
-            $batch->manageEggs->sum('jumbo') +
-            $batch->manageEggs->sum('broken');
-
-        // Group by section
-        $batch->sections = $batch->manageEggs
-            ->groupBy('section')
-            ->map(function ($items, $sectionName) {
-
-                return [
-                    'id' => $sectionName,
-                    'name' => $sectionName,
-                    'total_eggs' =>
-                        $items->sum('pullet') +
-                        $items->sum('small') +
-                        $items->sum('medium') +
-                        $items->sum('large') +
-                        $items->sum('extra_large') +
-                        $items->sum('jumbo') +
-                        $items->sum('broken'),
-                ];
-            })
-            ->values(); // important to make it array
-
-        return $batch;
+        return $item;
     });
 
-    
-    // total of all eggs
-    $totals['total_eggs'] = array_sum($totals);
+    // monthly chart data
+    $monthlyData = ManageEgg::select(
+        DB::raw('YEAR(created_at) as year'),
+        DB::raw('DATE_FORMAT(created_at, "%b") as month'),
+        DB::raw('MONTH(created_at) as month_num'),
+        DB::raw('SUM(pullet + small + medium + large + extra_large + jumbo + broken) as total')
+    )
+    ->where('created_at', '>=', now()->subYears(5)->startOfYear())
+    ->groupBy('year', 'month', 'month_num')
+    ->orderBy('year', 'desc')
+    ->orderBy('month_num', 'asc')
+    ->get();
+
+    $batches = Batch::with('manageEggs')->get();
 
     return Inertia::render('Admin/Dashboard', [
-        'totals' => $totals,
+        'totalsByYear' => $totalsByYear,
         'batches' => $batches,
+        'monthlyData' => $monthlyData,
     ]);
     }
 

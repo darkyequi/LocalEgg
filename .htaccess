@@ -1,0 +1,17 @@
+# Hostinger subdomain deployment .htaccess
+RewriteEngine On
+RewriteBase /
+
+# Redirect to index.php if file or directory doesn't exist
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [L,QSA]
+
+# Optional: set default charset and security headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "DENY"
+</IfModule>
+
+# Disable directory browsing
+Options -Indexes

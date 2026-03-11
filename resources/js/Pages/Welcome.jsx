@@ -88,7 +88,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                                 <div className='w-full  bg-[url("images/background-nest.png")] md:bg-auto flex-1 h-[600px] rounded-[60px] shadow-md p-5 justify-start items-center border-2 md:w-3/5 md:h-auto'>
                                     <h1 className='md:text-4xl text-xl font-semibold p-5 text-green-800'>Innovate your Poultry Farm</h1>
                                     <div className='place-items-center overflow-hidden md:flex md:flex-col md:mt-7 md:gap-5'>
-                                        <img src={welcome} alt="Welcome" className=" w-44 h-44 rounded-[60px] md:w-52 md:h-52 lg:w-72 lg:h-72 "></img>
+                                        <img src={welcome} alt="Welcome" className=" w-44 h-44 rounded-[60px] sm:w-72 sm:h-72 md:w-52 md:h-52 lg:w-72 lg:h-72 "></img>
                                         <p className='text-center'>Lorem ipsum dolor sit amet consectetur adipisicing elit. At consectetur delectus repellat ullam, recusandae consequuntur ducimus incidunt illo quia veniam fugit id quaerat doloribus architecto officia exercitationem ea? Cumque, dolorum!Improve your poultry farm operations with our smart inventory management system.</p>
                                     </div>
                                 </div>
