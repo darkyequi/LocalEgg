@@ -168,5 +168,45 @@ class AdminController extends Controller
         'batches' => $batches,
     ]);
     }
-    
+    public function exportRecords(Request $request)
+{
+    $batchId = $request->query('batch_id', 'all');
+    $startDate = $request->query('start_date'); // optional
+    $endDate = $request->query('end_date');     // optional
+
+    // Load batches with filtered manageEggs
+    $batchesQuery = \App\Models\Batch::with(['manageEggs' => function ($q) use ($startDate, $endDate) {
+        $q->orderBy('created_at', 'desc');
+        if ($startDate) {
+            $q->whereDate('created_at', '>=', $startDate);
+        }
+        if ($endDate) {
+            $q->whereDate('created_at', '<=', $endDate);
+        }
+    }]);
+
+    $batches = $batchesQuery->get();
+
+    if ($batchId === 'all') {
+        $records = $batches->flatMap(function ($batch) {
+            return $batch->manageEggs->map(fn($r) => array_merge($r->toArray(), ['batch_name' => $batch->name]));
+        });
+        $batchName = null;
+    } else {
+        $batch = $batches->firstWhere('id', $batchId);
+        $records = $batch->manageEggs->map(fn($r) => array_merge($r->toArray(), ['batch_name' => $batch->name]));
+        $batchName = $batch->name;
+    }
+
+    return \Maatwebsite\Excel\Facades\Excel::download(
+        new \App\Exports\RecordsExport(
+            $records,
+            'Local Egg System', // system name
+            'Local Roots Farm', // farm name
+            'Concepcion Palasan Sariaya, Quezon', // farm address
+            $batchName
+        ),
+        'records.xlsx'
+    );
+}
 }

@@ -119,14 +119,20 @@ export default function CreateBatch({ batches }) {
             }
         >
             <Head title="Create Batch" />
-            <div className="py-12 bg-emerald-50/30 dark:bg-gray-900 min-h-screen">
-                <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-emerald-50/30 dark:bg-gray-900 min-h-screen">
+                <div className="max-w-5xl mx-auto sm:px-6 lg:px-8">
                     
                     {/* Header Info */}
                     <div className="mb-8 sm:flex sm:justify-between sm:items-end gap-4">
                         <div className="mb-4 sm:mb-0">
-                            <h2 className="text-4xl font-black text-emerald-950 dark:text-white uppercase tracking-tight">Create Batch</h2>
-                            <p className="text-emerald-600 font-medium mt-1">Setup and organize your poultry farm batches.</p>
+                            <div className="mb-6">
+                                <h1 className="text-3xl font-extrabold text-green-800 dark:text-green-300 mb-2 border-b-2 border-green-300 dark:border-green-700 pb-1 w-max">
+                                    Batch Management
+                                </h1>
+                                <p className="text-green-700 dark:text-green-200 text-sm">
+                                    Set up and organize poultry farm batches by grouping birds based on age or production stage to ensure proper management, efficient care, and consistent farm operations.
+                                </p>
+                            </div>
                         </div>
                         <button 
                             onClick={openModal} 
@@ -144,8 +150,20 @@ export default function CreateBatch({ batches }) {
                                 {/* Left Side: Visual Identity */}
                                 <div className="w-1/3 bg-emerald-50 dark:bg-gray-700 flex flex-col items-center justify-center p-4 transition-colors group-hover:bg-emerald-100">
                                     <img src={itlog} alt='itlog' className='w-16 h-16 sm:w-20 sm:h-20 drop-shadow-md group-hover:scale-110 transition-transform duration-500' />
-                                    <div className="mt-2 text-[10px] font-black text-emerald-600 uppercase tracking-widest">
-                                        Batch ID: {batch.id}
+                                    <div className="mt-2 text-[10px] font-black text-emerald-600 uppercase tracking-widest text-center">
+                                        {(() => {
+                                            if (!batch.date) return "No start date";
+                                            const start = new Date(batch.date);
+                                            const now = new Date();
+
+                                            // Calculate difference in milliseconds
+                                            const diffTime = now.setHours(0,0,0,0) - start.setHours(0,0,0,0);
+
+                                            // Convert to full days
+                                            const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+
+                                            return `${diffDays} day${diffDays !== 1 ? "s" : ""} old`;
+                                        })()}
                                     </div>
                                 </div>
 

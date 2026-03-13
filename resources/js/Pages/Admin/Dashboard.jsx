@@ -131,10 +131,16 @@ export default function Dashboard({ totalsByYear = [], batches = [], monthlyData
 
             <Head title="Dashboard" />
 
-            <div className="py-12">
-
+            <div>
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-
+                    <div className="mb-6">
+                        <h1 className="text-3xl font-extrabold text-green-800 dark:text-green-300 mb-2 border-b-2 border-green-300 dark:border-green-700 pb-1 w-max">
+                            Dashboard
+                        </h1>
+                        <p className="text-green-700 dark:text-green-200 text-sm">
+                            Overview of egg production and batch performance. Filter by year to analyze monthly trends.
+                        </p>
+                    </div>
                     {/* Top Metrics */}
                     <div className='w-full grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4'>
 

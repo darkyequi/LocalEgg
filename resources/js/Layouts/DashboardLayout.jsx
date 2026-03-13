@@ -36,6 +36,13 @@ export default function DashboardLayout({ children, title }) {
         { name: 'Dashboard', href: 'admin.dashboard' },
         { name: 'Records', href: 'admin.records' },
         { name: 'Create Batches', href: 'admin.createbatch' },
+        {
+            name: 'Manage Account',
+            children: [
+                { name: 'Manage User', href: 'admin.manageusers' },
+                { name: 'Manage Admin', href: 'admin.manageadmins' },
+            ],
+        },
     ];
 
     const superAdminNav = [
@@ -84,16 +91,25 @@ export default function DashboardLayout({ children, title }) {
 
                 {/* NAVIGATION */}
                 <nav className="flex-1 p-4 space-y-2">
-                    {navigation.map((item) => (
-                        <NavLink
-                            key={item.name}
-                            href={route(item.href)}
-                            active={route().current(item.href)}
-                            onClick={() => setIsMobileMenuOpen(false)}
-                        >
-                            {item.name}
-                        </NavLink>
-                    ))}
+                    {navigation.map((item) =>
+                        item.children ? (
+                            <NavDropdown
+                                key={item.name}
+                                label={item.name}
+                                items={item.children}
+                                onLinkClick={() => setIsMobileMenuOpen(false)}
+                            />
+                        ) : (
+                            <NavLink
+                                key={item.name}
+                                href={route(item.href)}
+                                active={route().current(item.href)}
+                                onClick={() => setIsMobileMenuOpen(false)}
+                            >
+                                {item.name}
+                            </NavLink>
+                        )
+                    )}
                 </nav>
             </aside>
 
@@ -183,5 +199,52 @@ function NavLink({ href, active, children, onClick }) {
         >
             {children}
         </Link>
+    );
+}
+
+function NavDropdown({ label, items, onLinkClick }) {
+    const isChildActive = items.some((item) => route().current(item.href));
+    const [open, setOpen] = useState(isChildActive);
+
+    return (
+        <div>
+            <button
+                onClick={() => setOpen(!open)}
+                className={`flex items-center justify-between w-full px-4 py-3 rounded-lg transition
+                    ${isChildActive
+                        ? 'bg-green-500/10 text-green-600 dark:text-green-400 font-bold'
+                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}
+                `}
+            >
+                <span>{label}</span>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2}
+                    stroke="currentColor"
+                    className={`w-4 h-4 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+                >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                </svg>
+            </button>
+
+            <div
+                className={`overflow-hidden transition-all duration-200 ${open ? 'max-h-40 mt-1' : 'max-h-0'}`}
+            >
+                <div className="ml-4 space-y-1">
+                    {items.map((child) => (
+                        <NavLink
+                            key={child.name}
+                            href={route(child.href)}
+                            active={route().current(child.href)}
+                            onClick={onLinkClick}
+                        >
+                            {child.name}
+                        </NavLink>
+                    ))}
+                </div>
+            </div>
+        </div>
     );
 }
