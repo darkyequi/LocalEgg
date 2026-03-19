@@ -69,7 +69,7 @@ class BatchController extends Controller
     {
         //
         $request->validate([
-        'name' => 'required|string|max:255|unique:batches,name',
+        'name' => 'required|string|max:255|unique:batches,name,' . $batch->id,
         'section' => 'required|integer|min:1',
         'date' => 'required|date',
         ]);

@@ -12,6 +12,7 @@ class ManageEgg extends Model
 
     protected $fillable = [
         'batch_id',
+        'user_id',
         'section',
         'pullet',
         'small',
@@ -25,5 +26,10 @@ class ManageEgg extends Model
     public function batch()
     {
         return $this->belongsTo(Batch::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(\App\Models\User::class);
     }
 }

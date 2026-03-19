@@ -118,7 +118,7 @@ class AdminController extends Controller
         $today = now()->toDateString();
 
     $batches = Batch::with(['manageEggs' => function ($query) {
-        $query->orderBy('created_at', 'desc');
+        $query->with('user')->orderBy('created_at', 'desc');
     }])->get()->map(function($batch) {
 
         
@@ -176,7 +176,7 @@ class AdminController extends Controller
 
     // Load batches with filtered manageEggs
     $batchesQuery = \App\Models\Batch::with(['manageEggs' => function ($q) use ($startDate, $endDate) {
-        $q->orderBy('created_at', 'desc');
+        $q->with('user')->orderBy('created_at', 'desc');
         if ($startDate) {
             $q->whereDate('created_at', '>=', $startDate);
         }

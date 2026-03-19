@@ -12,7 +12,7 @@ export default function Records({ batches }) {
     const [isShow, setIsShow] = useState(false);
     const [selectedRecord, setSelectedRecord] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const recordsPerPage = 5;
+    const recordsPerPage = 6;
 
     // Find selected batch
     const selectedBatch = selectedBatchId === 'all'
@@ -202,36 +202,51 @@ export default function Records({ batches }) {
                     {/* Table */}
                     <div className="bg-white dark:bg-gray-800 mt-4 rounded-2xl border border-slate-200 dark:border-gray-700 shadow-sm overflow-hidden transition-colors">
                         <div className="overflow-x-auto">
-                            <table className="w-full text-left border-collapse text-xs">
-                                <thead className="bg-slate-50 dark:bg-gray-900/50">
+                            <table className="w-full text-left border-collapse text-xs block lg:table">
+                                <thead className="bg-slate-50 dark:bg-gray-900/50 hidden lg:table-header-group">
                                     <tr>
+                                        <th className="px-6 py-4 font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Name</th>
                                         <th className="px-6 py-4 font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Batch</th>
                                         <th className="px-6 py-4 font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Section</th>
                                         {columnName.map(cn => (
-                                            <th key={cn.id} className="px-6 py-4 sm:table-cell hidden font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider">{cn.name}</th>
+                                            <th key={cn.id} className="px-6 py-4 font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider">{cn.name}</th>
                                         ))}
-                                        <th className="px-6 py-4 table-cell sm:hidden font-bold text-slate-500 dark:text-gray-400 uppercase tracking-wider">Action</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-slate-100 dark:divide-gray-700">
+                                <tbody className="divide-y divide-slate-100 dark:divide-gray-700 lg:table-row-group grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 p-4 lg:p-0 bg-gray-50 dark:bg-gray-900/30 lg:bg-transparent">
                                     {currentRecords.map(record => (
-                                        <tr key={record.id} className='hover:bg-slate-50/50 dark:hover:bg-gray-700/50 transition-colors text-gray-700 dark:text-gray-300'>
-                                            <td className="px-6 py-4">{record.batch_name}</td>
-                                            <td className='px-6 py-4'>Section {record.section}</td>
-                                            <td className='px-6 py-4 hidden sm:table-cell'>{new Date(record.created_at).toLocaleDateString()}</td>
-                                            <td className="px-6 py-4 hidden sm:table-cell">{record.pullet}</td>
-                                            <td className="px-6 py-4 hidden sm:table-cell">{record.small}</td>
-                                            <td className="px-6 py-4 hidden sm:table-cell">{record.medium}</td>
-                                            <td className="px-6 py-4 hidden sm:table-cell">{record.large}</td>
-                                            <td className="px-6 py-4 hidden sm:table-cell">{record.extra_large}</td>
-                                            <td className="px-6 py-4 hidden sm:table-cell">{record.jumbo}</td>
-                                            <td className="px-6 py-4 hidden sm:table-cell">{record.broken}</td>
-                                            <td className="px-6 py-4 hidden sm:table-cell">{record.chicken_death}</td>
-                                            <td className='sm:hidden px-6 py-4'>
-                                                <PrimaryButton onClick={() => openRecords(record)} className='text-[5px]'>
+                                        <tr key={record.id} className='hover:bg-slate-50/50 dark:hover:bg-gray-700/50 transition-colors text-gray-700 dark:text-gray-300 flex flex-col lg:table-row bg-white dark:bg-gray-800 lg:bg-transparent border dark:border-gray-700 lg:border-none rounded-2xl lg:rounded-none shadow-sm lg:shadow-none p-4 lg:p-0 lg:divide-y-0'>
+                                            <td className="px-0 py-2 lg:px-6 lg:py-4 flex lg:table-cell justify-between items-center">
+                                                <span className="font-bold text-slate-500 dark:text-gray-400 lg:hidden">Name</span>
+                                                <span className="font-medium text-gray-900 dark:text-gray-100 lg:font-normal lg:text-gray-700 lg:dark:text-gray-300 text-sm lg:text-xs text-right">{record.user?.name || 'Unknown'}</span>
+                                            </td>
+                                            <td className="px-0 py-2 lg:px-6 lg:py-4 flex lg:table-cell justify-between items-center border-t border-gray-100 dark:border-gray-700 lg:border-none">
+                                                <span className="font-bold text-slate-500 dark:text-gray-400 lg:hidden">Batch</span>
+                                                <span className="text-sm lg:text-xs text-right">{record.batch_name}</span>
+                                            </td>
+                                            <td className='px-0 py-2 lg:px-6 lg:py-4 flex lg:table-cell justify-between items-center border-t border-gray-100 dark:border-gray-700 lg:border-none'>
+                                                <span className="font-bold text-slate-500 dark:text-gray-400 lg:hidden">Section</span>
+                                                <span className="text-sm lg:text-xs text-right">Section {record.section}</span>
+                                            </td>
+                                            <td className='px-0 py-2 lg:px-6 lg:py-4 flex lg:table-cell justify-between items-center border-t border-gray-100 dark:border-gray-700 lg:border-none'>
+                                                <span className="font-bold text-slate-500 dark:text-gray-400 lg:hidden">Date</span>
+                                                <span className="text-sm lg:text-xs text-right">{new Date(record.created_at).toLocaleDateString()}</span>
+                                            </td>
+
+                                            <td className='px-6 py-0 lg:hidden pt-4 pb-1 flex flex-col border-t border-gray-100 dark:border-gray-700'>
+                                                <PrimaryButton onClick={() => openRecords(record)} className='w-full justify-center'>
                                                     View Details
                                                 </PrimaryButton>
                                             </td>
+
+                                            <td className="px-6 py-4 hidden lg:table-cell">{record.pullet}</td>
+                                            <td className="px-6 py-4 hidden lg:table-cell">{record.small}</td>
+                                            <td className="px-6 py-4 hidden lg:table-cell">{record.medium}</td>
+                                            <td className="px-6 py-4 hidden lg:table-cell">{record.large}</td>
+                                            <td className="px-6 py-4 hidden lg:table-cell">{record.extra_large}</td>
+                                            <td className="px-6 py-4 hidden lg:table-cell">{record.jumbo}</td>
+                                            <td className="px-6 py-4 hidden lg:table-cell">{record.broken}</td>
+                                            <td className="px-6 py-4 hidden lg:table-cell">{record.chicken_death}</td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -268,6 +283,7 @@ export default function Records({ batches }) {
                         <h2 className="text-lg font-bold mb-4 border-b dark:border-gray-700 pb-2">Record Details</h2>
                         {selectedRecord && (
                             <div className="grid grid-cols-2 gap-4 text-sm">
+                                <p className="col-span-2"><strong>Name:</strong> {selectedRecord.user?.name || 'Unknown'}</p>
                                 <p><strong>Batch:</strong> {selectedRecord.batch_name}</p>
                                 <p><strong>Section:</strong> {selectedRecord.section}</p>
                                 <p className="col-span-2"><strong>Date:</strong> {new Date(selectedRecord.created_at).toLocaleDateString()}</p>

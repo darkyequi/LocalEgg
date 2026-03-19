@@ -72,6 +72,7 @@ class ManageEggController extends Controller
 
         ManageEgg::create([
             'batch_id' => $batchId,
+            'user_id' => auth()->id(),
             'section' => $sectionName,
             'pullet' => $helo['pullet'] ?? 0,
             'small' => $helo['small'] ?? 0,
@@ -122,6 +123,7 @@ class ManageEggController extends Controller
                 'created_at' => now()->toDateString(),
             ],
             [
+                'user_id' => auth()->id(),
                 'pullet' => $helo['pullet'] ?? 0,
                 'small' => $helo['small'] ?? 0,
                 'medium' => $helo['medium'] ?? 0,
