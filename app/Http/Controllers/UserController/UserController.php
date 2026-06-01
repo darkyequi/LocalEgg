@@ -4,6 +4,8 @@ namespace App\Http\Controllers\UserController;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Batch;
+use App\Models\ManageEgg;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -12,9 +14,60 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        return Inertia::render('User/Dashboard');
+    public function index() {
+        $totals = [
+        'pullet' => ManageEgg::sum('pullet'),
+        'small' => ManageEgg::sum('small'),
+        'medium' => ManageEgg::sum('medium'),
+        'large' => ManageEgg::sum('large'),
+        'extra_large' => ManageEgg::sum('extra_large'),
+        'jumbo' => ManageEgg::sum('jumbo'),
+        'broken' => ManageEgg::sum('broken'),
+        'chicken_death' => ManageEgg::sum('chicken_death'),
+    ];
+    $batches = Batch::with('manageEggs')->get()->map(function($batch) {
+
+        // Total eggs per batch
+        $batch->total_eggs =
+            $batch->manageEggs->sum('pullet') +
+            $batch->manageEggs->sum('small') +
+            $batch->manageEggs->sum('medium') +
+            $batch->manageEggs->sum('large') +
+            $batch->manageEggs->sum('extra_large') +
+            $batch->manageEggs->sum('jumbo') +
+            $batch->manageEggs->sum('broken');
+
+        // Group by section
+        $batch->sections = $batch->manageEggs
+            ->groupBy('section')
+            ->map(function ($items, $sectionName) {
+
+                return [
+                    'id' => $sectionName,
+                    'name' => $sectionName,
+                    'total_eggs' =>
+                        $items->sum('pullet') +
+                        $items->sum('small') +
+                        $items->sum('medium') +
+                        $items->sum('large') +
+                        $items->sum('extra_large') +
+                        $items->sum('jumbo') +
+                        $items->sum('broken'),
+                ];
+            })
+            ->values(); // important to make it array
+
+        return $batch;
+    });
+
+    
+    // total of all eggs
+    $totals['total_eggs'] = array_sum($totals);
+
+    return Inertia::render('User/Dashboard', [
+        'totals' => $totals,
+        'batches' => $batches,
+    ]);
     }
 
     /**
@@ -63,10 +116,5 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         //
-    }
-
-    public function inventory()
-    {
-        return Inertia::render('User/Inventory');
     }
 }

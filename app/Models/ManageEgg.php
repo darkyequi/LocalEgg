@@ -3,8 +3,33 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Http\Controllers\AdminController\BatchController;
 
 class ManageEgg extends Model
 {
-    //
+    use HasFactory;
+
+    protected $fillable = [
+        'batch_id',
+        'user_id',
+        'section',
+        'pullet',
+        'small',
+        'medium',
+        'large',
+        'extra_large',
+        'jumbo',
+        'broken',
+        'chicken_death',
+    ];
+    public function batch()
+    {
+        return $this->belongsTo(Batch::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(\App\Models\User::class);
+    }
 }

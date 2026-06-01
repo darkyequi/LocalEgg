@@ -17,7 +17,7 @@ class BatchController extends Controller
     {
         //
         return Inertia::render('Admin/CreateBatch', [
-    'batches' => Batch::latest()->get(),
+        'batches' => Batch::latest()->get(),
 ]);
     }
 
@@ -36,7 +36,7 @@ class BatchController extends Controller
     {
         //
         $request->validate([
-        'name' => 'required|string|max:255',
+        'name' => 'required|string|max:255|unique:batches,name',
         'section' => 'required|integer|min:1',
         'date' => 'required|date',
         ]);
@@ -69,7 +69,7 @@ class BatchController extends Controller
     {
         //
         $request->validate([
-        'name' => 'required|string|max:255',
+        'name' => 'required|string|max:255|unique:batches,name,' . $batch->id,
         'section' => 'required|integer|min:1',
         'date' => 'required|date',
         ]);

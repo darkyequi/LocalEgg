@@ -90,7 +90,7 @@ export default function Login({ status, canResetPassword }) {
                     
                 </div>
                 <div className='mt-4 flex justify-center w-full'>
-                    <PrimaryButton className=" w-full h-full" disabled={processing}>
+                    <PrimaryButton className=" w-full h-full py-2 px-4" disabled={processing}>
                         Log in
                     </PrimaryButton>
                 </div>
