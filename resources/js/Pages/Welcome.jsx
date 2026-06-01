@@ -73,47 +73,69 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                                     </span>
                                 </h1>
                                 <p className='text-center mt-6 text-lg dark:text-gray-500 lg:px-40 lg:mx-40'>
-                                    From daily egg collection to stock monitoring and freshness control, manage everything effortlessly and stay ahead of demand.                                
+                                    From daily egg collection to stock monitoring and freshness control, manage everything effortlessly and stay ahead of demand.
                                 </p>
-                               <button className='my-4'>
+                                <button className='my-4'>
                                     <Link
                                         href={route('register')}
                                         className="mt-6 rounded-md bg-green-600 px-5 py-3 text-lg text-white transition hover:bg-green-700 focus:outline-none focus-visible:ring-[#FF2D20] dark:bg-green-500 dark:hover:bg-green-600 dark:focus-visible:ring-white"
                                     >
                                         Get Started
                                     </Link>
-                               </button>
+                                </button>
                             </div>
                             <div className='flex gap-6 w-full mt-20 flex-wrap justify-center md:justify-start'>
-                                <div className='w-full  bg-[url("images/background-nest.png")] md:bg-auto flex-1 h-[600px] rounded-[60px] shadow-md p-5 justify-start items-center border-2 md:w-3/5 md:h-auto'>
-                                    <h1 className='md:text-4xl text-xl font-semibold p-5 text-green-800'>Innovate your Poultry Farm</h1>
-                                    <div className='place-items-center overflow-hidden md:flex md:flex-col md:mt-7 md:gap-5'>
-                                        <img src={welcome} alt="Welcome" className=" w-44 h-44 rounded-[60px] md:w-52 md:h-52 lg:w-72 lg:h-72 "></img>
-                                        <p className='text-center'>Lorem ipsum dolor sit amet consectetur adipisicing elit. At consectetur delectus repellat ullam, recusandae consequuntur ducimus incidunt illo quia veniam fugit id quaerat doloribus architecto officia exercitationem ea? Cumque, dolorum!Improve your poultry farm operations with our smart inventory management system.</p>
+                                <div className="relative w-full md:w-3/5 flex-1 h-[600px] md:h-auto rounded-[60px] shadow-md p-5 justify-start items-center border-2 overflow-hidden">
+
+                                    {/* Background image as real <img> */}
+                                    <img
+                                        src="images/background-nest.png"
+                                        alt="Background Nest"
+                                        className="absolute inset-0 w-full h-full object-cover -z-10 rounded-[60px]"
+                                    />
+
+                                    <h1 className="md:text-4xl text-xl font-semibold p-5 text-green-800">
+                                        Innovate your Poultry Farm
+                                    </h1>
+
+                                    <div className="place-items-center overflow-hidden md:flex md:flex-col md:mt-7 md:gap-5">
+                                        <img
+                                            src={welcome}
+                                            alt="Welcome"
+                                            className="w-44 h-44 rounded-[60px] md:w-52 md:h-52 lg:w-72 lg:h-72"
+                                        />
+
+                                        <p className="text-center">
+                                            Lorem ipsum dolor sit amet consectetur adipisicing elit. At consectetur
+                                            delectus repellat ullam, recusandae consequuntur ducimus incidunt illo
+                                            quia veniam fugit id quaerat doloribus architecto officia exercitationem
+                                            ea? Cumque, dolorum! Improve your poultry farm operations with our smart inventory management system.
+                                        </p>
                                     </div>
+
                                 </div>
                                 <div className='w-full flex flex-2 flex-col gap-3 md:w-2/5'>
-                                        <div className='items-center justify-center text-white bg-green-500 bg-opacity-90 rounded-[50px] w-full h-64 shadow-md border-2 p-7 md:h-80'>
-                                            <ApplicationLogo className="w-34 h-24 mx-auto hidden sm:block"/>
-                                            <h1 className='text-3xl font-semibold'>
-                                                <a href="" className='text-4xl sm:text-3xl'><i class="fa-solid fa-egg"></i></a> Inventory Management
-                                            </h1>
-                                            <br />
-                                            <p className=''>Track and manage your egg inventory with ease. Help grow your poultry business efficiently.</p>
-                                        </div>
+                                    <div className='items-center justify-center text-white bg-green-500 bg-opacity-90 rounded-[50px] w-full h-64 shadow-md border-2 p-7 md:h-80'>
+                                        <ApplicationLogo className="w-34 h-24 mx-auto hidden sm:block" />
+                                        <h1 className='text-3xl font-semibold'>
+                                            <a href="" className='text-4xl sm:text-3xl'><i class="fa-solid fa-egg"></i></a> Inventory Management
+                                        </h1>
+                                        <br />
+                                        <p className=''>Track and manage your egg inventory with ease. Help grow your poultry business efficiently.</p>
+                                    </div>
                                     <div className='flex flex-wrap gap-3 md:flex-nowrap'>
                                         <div className='bg-green-800 rounded-[40px] text-white w-full h-48 p-7 items-center justify-center md:w-full md:h-64'>
                                             <h1 className='text-3xl font-semibold'>
                                                 <a href=""><i class="fa-regular fa-clipboard"></i></a><br />Record
                                             </h1>
                                             <p>Record your daily egg inventory details.</p>
-                                        </div> 
+                                        </div>
                                         <div className='bg-green-200 rounded-[40px] w-full h-48 p-7 items-center justify-center md:w-2/3 md:h-64'>
                                             <h1 className='text-3xl font-semibold'>
                                                 <a href=""><i class="fa-solid fa-chart-simple"></i></a><br />Metrics
                                             </h1>
                                             <p>View and analyze your egg inventory data.</p>
-                                        </div> 
+                                        </div>
                                     </div>
                                 </div>
                             </div>
