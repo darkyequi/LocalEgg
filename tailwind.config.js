@@ -16,6 +16,17 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            keyframes: {
+                float: {
+                    '0%, 100%': { transform: 'translateY(0px)' },
+                    '50%': { transform: 'translateY(-10px)' },
+                }
+            },
+            animation: {
+                float: 'float 6s ease-in-out infinite',
+                'float-delayed': 'float 6s ease-in-out infinite 2s',
+                'float-slow': 'float 8s ease-in-out infinite 4s',
+            }
         },
     },
 
