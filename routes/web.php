@@ -7,6 +7,8 @@ use App\Http\Controllers\UserController\UserController;
 use App\Http\Controllers\UserController\ManageEggController;
 use App\Http\Controllers\SuperAdminController\SuperAdminController;
 use App\Http\Controllers\AdminController\BatchController;
+use App\Http\Controllers\AdminController\AttendanceController;
+use App\Http\Controllers\AdminController\EmployeeController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -47,6 +49,15 @@ Route::middleware('auth')->group(function () {
         Route::put('/manage-admins/{user}', [ManageAccountController::class, 'updateAdmin'])->name('manageadmins.update');
         Route::patch('/manage-admins/{user}/deactivate', [ManageAccountController::class, 'deactivateAdmin'])->name('manageadmins.deactivate');
         Route::patch('/manage-admins/{user}/activate', [ManageAccountController::class, 'activateAdmin'])->name('manageadmins.activate');
+    
+         // Attendance
+        Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance');
+        Route::post('/attendance/record', [AttendanceController::class, 'record'])->name('attendance.record');
+
+        // Employee Registration
+        Route::get('/employee-register', [EmployeeController::class, 'index'])->name('employee.register');
+        Route::get('/employee-register/descriptors', [EmployeeController::class, 'descriptors'])->name('employee.descriptors');
+        Route::post('/employee-register', [EmployeeController::class, 'store'])->name('employee.store');
     });
     //Super Admin
      Route::middleware(['role:superadmin'])->prefix('superadmin')->name('superadmin.')->group(function () {

@@ -34,13 +34,25 @@ export default function DashboardLayout({ children, title }) {
 
     const adminNav = [
         { name: 'Dashboard', href: 'admin.dashboard' },
-        { name: 'Records', href: 'admin.records' },
-        { name: 'Create Batches', href: 'admin.createbatch' },
+        {
+            name: 'Manage Eggs',
+            children:[
+                { name: 'Records', href: 'admin.records' },
+                { name: 'Create Batches', href: 'admin.createbatch' },
+            ],
+        },
         {
             name: 'Manage Account',
             children: [
                 { name: 'Manage User', href: 'admin.manageusers' },
                 { name: 'Manage Admin', href: 'admin.manageadmins' },
+            ],
+        },
+        {
+            name: 'Employee Management',
+            children: [
+                { name: 'Employee Register', href: 'admin.employee.register' },
+                { name: 'Attendance', href: 'admin.attendance' },
             ],
         },
     ];
