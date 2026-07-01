@@ -1,7 +1,6 @@
 import DashboardLayout from "../../Layouts/DashboardLayout";
 import { Head, useForm } from "@inertiajs/react";
 import PrimaryButton from "@/Components/PrimaryButton";
-import SecondaryButton from "@/Components/SecondaryButton";
 import itlog from '../../../../public/images/itlog.gif';
 import Modal from "@/Components/Modal";
 import React, { useState } from "react";

@@ -1,5 +1,5 @@
-import AuthenticatedLayout from '@/Layouts/DashboardLayout';
-import { Head } from '@inertiajs/react';
+import DashboardLayout from '@/Layouts/DashboardLayout';
+import { Head, usePage } from '@inertiajs/react';
 import React, { useEffect, useRef, useState } from 'react';
 import * as faceapi from 'face-api.js';
 import { useFaceApi } from '@/Hooks/useFaceApi';
@@ -13,21 +13,33 @@ export default function Attendance({ todayLogs = [], employees = [] }) {
     const [status, setStatus] = useState({ text: 'Loading models...', type: 'idle' });
     const [mode, setMode] = useState('time_in');
     const [logs, setLogs] = useState(todayLogs);
+    const { auth } = usePage().props;
+    const userRole = auth.user.role;
 
     // Load employee face descriptors once models are ready
     useEffect(() => {
         if (!modelsLoaded) return;
-        axios.get('/admin/employee-register/descriptors').then(({ data }) => {
+
+        const endpoint =
+            userRole === 'superadmin'
+                ? '/superadmin/employee-register/descriptors'
+                : '/admin/employee-register/descriptors';
+
+        axios.get(endpoint).then(({ data }) => {
             const labeled = data.map(emp =>
                 new faceapi.LabeledFaceDescriptors(
                     JSON.stringify({ id: emp.id, name: emp.name }),
                     [new Float32Array(emp.descriptor)]
                 )
             );
+
             setLabeledDescriptors(labeled);
-            setStatus({ text: 'Ready — position face within the frame', type: 'ready' });
+            setStatus({
+                text: 'Ready — position face within the frame',
+                type: 'ready'
+            });
         });
-    }, [modelsLoaded]);
+    }, [modelsLoaded, userRole]);
 
     // Start webcam
     useEffect(() => {
@@ -61,7 +73,12 @@ export default function Attendance({ todayLogs = [], employees = [] }) {
         const employee = JSON.parse(match.label);
 
         try {
-            const res = await axios.post('/admin/attendance/record', {
+            const endpoint =
+            userRole === 'superadmin'
+                ? '/superadmin/attendance/record'
+                : '/admin/attendance/record';
+
+            const res = await axios.post(endpoint, {
                 employee_id: employee.id,
                 type: mode,
             });
@@ -97,7 +114,7 @@ export default function Attendance({ todayLogs = [], employees = [] }) {
     const absentCount = Math.max(0, employees.length - presentCount);
 
     return (
-        <AuthenticatedLayout
+        <DashboardLayout
             header={
                 <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
                     Attendance
@@ -143,11 +160,10 @@ export default function Attendance({ todayLogs = [], employees = [] }) {
                                     <button
                                         key={tab.value}
                                         onClick={() => setMode(tab.value)}
-                                        className={`flex-1 py-2 text-sm rounded-lg transition-all ${
-                                            mode === tab.value
+                                        className={`flex-1 py-2 text-sm rounded-lg transition-all ${mode === tab.value
                                                 ? 'bg-white dark:bg-gray-800 text-green-700 dark:text-green-400 font-semibold shadow-sm'
                                                 : 'text-gray-500 dark:text-gray-400'
-                                        }`}
+                                            }`}
                                     >
                                         {tab.label}
                                     </button>
@@ -202,11 +218,10 @@ export default function Attendance({ todayLogs = [], employees = [] }) {
                                             </td>
                                             <td className="py-3 text-gray-500 dark:text-gray-400">{log.recorded_at}</td>
                                             <td className="py-3">
-                                                <span className={`px-2 py-1 rounded-md text-xs font-medium ${
-                                                    log.type === 'time_in'
+                                                <span className={`px-2 py-1 rounded-md text-xs font-medium ${log.type === 'time_in'
                                                         ? 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300'
                                                         : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300'
-                                                }`}>
+                                                    }`}>
                                                     {log.type === 'time_in' ? 'Time in' : 'Time out'}
                                                 </span>
                                             </td>
@@ -224,6 +239,6 @@ export default function Attendance({ todayLogs = [], employees = [] }) {
                     </div>
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </DashboardLayout>
     );
 }

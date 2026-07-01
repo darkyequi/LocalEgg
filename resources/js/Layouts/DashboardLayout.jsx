@@ -59,7 +59,28 @@ export default function DashboardLayout({ children, title }) {
 
     const superAdminNav = [
         { name: 'Dashboard', href: 'superadmin.dashboard' },
-        { name: 'History', href: 'superadmin.history' },
+        {
+            name: 'Manage Eggs',
+            children:[
+                { name: 'Records', href: 'superadmin.records' },
+                { name: 'Create Batches', href: 'superadmin.createbatch' },
+            ],
+        },
+        {
+            name: 'Manage Account',
+            children: [
+                { name: 'Manage User', href: 'superadmin.manageusers' },
+                { name: 'Manage Admin', href: 'superadmin.manageadmins' },
+            ],
+        },
+        {
+            name: 'Employee Management',
+            children: [
+                { name: 'Employee Register', href: 'superadmin.employee.register' },
+                { name: 'Attendance', href: 'superadmin.attendance' },
+            ],
+        },
+        {name: 'Blogpost', href: 'superadmin.blogpost'}
     ];
 
     const navigation =

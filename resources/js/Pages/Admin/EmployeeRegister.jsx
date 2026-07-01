@@ -1,5 +1,5 @@
-import AuthenticatedLayout from '@/Layouts/DashboardLayout';
-import { Head } from '@inertiajs/react';
+import DashboardLayout from '@/Layouts/DashboardLayout';
+import { Head, usePage } from '@inertiajs/react';
 import React, { useEffect, useRef, useState } from 'react';
 import * as faceapi from 'face-api.js';
 import { useFaceApi } from '@/Hooks/useFaceApi';
@@ -14,6 +14,8 @@ export default function EmployeeRegister({ employees = [] }) {
     const [list, setList] = useState(employees);
     const [captured, setCaptured] = useState(false);
     const [descriptor, setDescriptor] = useState(null);
+    const { auth } = usePage().props;
+    const userRole = auth.user.role;
 
     useEffect(() => {
         if (modelsLoaded) setStatus({ text: 'Ready — position face within the frame', type: 'ready' });
@@ -46,8 +48,12 @@ export default function EmployeeRegister({ employees = [] }) {
 
     const handleRegister = async () => {
         if (!descriptor) return;
+        const endpoint =
+            userRole === 'superadmin'
+                ? '/superadmin/employee-register'
+                : '/admin/employee-register';
         try {
-            await axios.post('/admin/employee-register', {
+            await axios.post(endpoint, {
                 name: form.name,
                 employee_id: form.employee_id,
                 descriptor,
@@ -77,7 +83,7 @@ export default function EmployeeRegister({ employees = [] }) {
     }[status.type];
 
     return (
-        <AuthenticatedLayout
+        <DashboardLayout
             header={
                 <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
                     Employee Registration
@@ -198,6 +204,6 @@ export default function EmployeeRegister({ employees = [] }) {
                     </div>
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </DashboardLayout>
     );
 }
