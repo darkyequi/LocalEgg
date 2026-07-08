@@ -22,9 +22,13 @@ export default function EmployeeRegister({ employees = [] }) {
     }, [modelsLoaded]);
 
     useEffect(() => {
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(stream => { if (videoRef.current) videoRef.current.srcObject = stream; })
-            .catch(() => setStatus({ text: 'Camera access denied', type: 'error' }));
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => { if (videoRef.current) videoRef.current.srcObject = stream; })
+                .catch(() => setStatus({ text: 'Camera access denied', type: 'error' }));
+        } else {
+            setStatus({ text: 'Camera not supported or requires HTTPS', type: 'error' });
+        }
     }, []);
 
     const handleCapture = async () => {
