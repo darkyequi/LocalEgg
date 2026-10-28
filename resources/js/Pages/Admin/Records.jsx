@@ -1,5 +1,5 @@
 import PrimaryButton from '@/Components/PrimaryButton';
-import AuthenticatedLayout from '@/Layouts/DashboardLayout';
+import DashboardLayout from '@/Layouts/DashboardLayout';
 import SecondaryButton from '@/Components/SecondaryButton';
 import { Head } from '@inertiajs/react';
 import React, { useState, useMemo } from 'react';
@@ -91,7 +91,7 @@ export default function Records({ batches }) {
     };
 
     return (
-        <AuthenticatedLayout
+        <DashboardLayout
             header={<h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Records</h2>}
         >
             <Head title="Records" />
@@ -305,6 +305,6 @@ export default function Records({ batches }) {
                     </div>
                 </Modal>
             </div>
-        </AuthenticatedLayout>
+        </DashboardLayout>
     );
 }

@@ -5,18 +5,18 @@ use App\Http\Controllers\AdminController\AdminController;
 use App\Http\Controllers\AdminController\ManageAccountController;
 use App\Http\Controllers\UserController\UserController;
 use App\Http\Controllers\UserController\ManageEggController;
-use App\Http\Controllers\SuperAdminController\SuperAdminController;
 use App\Http\Controllers\AdminController\BatchController;
+use App\Http\Controllers\AdminController\AttendanceController;
+use App\Http\Controllers\AdminController\EmployeeController;
+use App\Http\Controllers\SuperAdminController\SuperAdminController;
+use App\Http\Controllers\SuperAdminController\BlogpostController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
+use Inertia\Inertia;    
+use App\Http\Controllers\WelcomeController;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-    ]);
-});
+Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
+Route::get('/blogposts', [WelcomeController::class, 'blogposts'])->name('blogposts.index');
 
 Route::middleware('auth')->group(function () {
     //User
@@ -47,10 +47,49 @@ Route::middleware('auth')->group(function () {
         Route::put('/manage-admins/{user}', [ManageAccountController::class, 'updateAdmin'])->name('manageadmins.update');
         Route::patch('/manage-admins/{user}/deactivate', [ManageAccountController::class, 'deactivateAdmin'])->name('manageadmins.deactivate');
         Route::patch('/manage-admins/{user}/activate', [ManageAccountController::class, 'activateAdmin'])->name('manageadmins.activate');
+    
+         // Attendance
+        Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance');
+        Route::post('/attendance/record', [AttendanceController::class, 'record'])->name('attendance.record');
+
+        // Employee Registration
+        Route::get('/employee-register', [EmployeeController::class, 'index'])->name('employee.register');
+        Route::get('/employee-register/descriptors', [EmployeeController::class, 'descriptors'])->name('employee.descriptors');
+        Route::post('/employee-register', [EmployeeController::class, 'store'])->name('employee.store');
     });
     //Super Admin
      Route::middleware(['role:superadmin'])->prefix('superadmin')->name('superadmin.')->group(function () {
         Route::get('/dashboard', [SuperAdminController::class, 'index'])->name('dashboard');
+        Route::get('/records', [AdminController::class, 'records'])->name('records');
+        Route::get('/createbatch', [BatchController::class, 'index'])->name('createbatch');
+        Route::post('/createbatch', [BatchController::class, 'store'])->name('createbatches.store');
+        Route::put('/createbatch/{batch}', [BatchController::class, 'update'])->name('createbatches.update');
+        Route::delete('/createbatch/{batch}', [BatchController::class, 'destroy'])->name('createbatches.destroy');
+        Route::get('/records/export', [AdminController::class, 'exportRecords'])->name('records.export');
+
+        // Manage Account
+        Route::get('/manage-users', [ManageAccountController::class, 'manageUsers'])->name('manageusers');
+        Route::post('/manage-users', [ManageAccountController::class, 'storeUser'])->name('manageusers.store');
+        Route::put('/manage-users/{user}', [ManageAccountController::class, 'updateUser'])->name('manageusers.update');
+        Route::patch('/manage-users/{user}/deactivate', [ManageAccountController::class, 'deactivateUser'])->name('manageusers.deactivate');
+        Route::patch('/manage-users/{user}/activate', [ManageAccountController::class, 'activateUser'])->name('manageusers.activate');
+        Route::get('/manage-admins', [ManageAccountController::class, 'manageAdmins'])->name('manageadmins');
+        Route::post('/manage-admins', [ManageAccountController::class, 'storeAdmin'])->name('manageadmins.store');
+        Route::put('/manage-admins/{user}', [ManageAccountController::class, 'updateAdmin'])->name('manageadmins.update');
+        Route::patch('/manage-admins/{user}/deactivate', [ManageAccountController::class, 'deactivateAdmin'])->name('manageadmins.deactivate');
+        Route::patch('/manage-admins/{user}/activate', [ManageAccountController::class, 'activateAdmin'])->name('manageadmins.activate');
+    
+         // Attendance
+        Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance');
+        Route::post('/attendance/record', [AttendanceController::class, 'record'])->name('attendance.record');
+
+        // Employee Registration
+        Route::get('/employee-register', [EmployeeController::class, 'index'])->name('employee.register');
+        Route::get('/employee-register/descriptors', [EmployeeController::class, 'descriptors'])->name('employee.descriptors');
+        Route::post('/employee-register', [EmployeeController::class, 'store'])->name('employee.store');
+
+        Route::get('/blogpost', [BlogpostController::class, 'index'])->name('blogpost');
+        Route::post('/blogpost', [BlogpostController::class, 'store'])->name('blogpost.store');
     });
 
 

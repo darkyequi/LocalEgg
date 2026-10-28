@@ -1,10 +1,25 @@
 import { Head, Link } from '@inertiajs/react';
 import React, { useState, useEffect } from 'react';
 
-export default function Welcome({ auth }) {
+export default function Welcome({ auth, blogposts = [] }) {
+    const [selectedPost, setSelectedPost] = useState(null);
+    const [activeImageIdx, setActiveImageIdx] = useState(0);
+    // Add this state alongside your modal states at the top of the file
+    const [currentCardStartIdx, setCurrentCardStartIdx] = useState(0);
+    const cardsPerPage = 3; // Number of posts visible at once on desktop
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const handlePrevCard = () => {
+        if (currentCardStartIdx > 0) {
+            setCurrentCardStartIdx((prev) => prev - 1);
+        }
+    };
 
+    const handleNextCard = () => {
+        if (currentCardStartIdx + cardsPerPage < blogposts.length) {
+            setCurrentCardStartIdx((prev) => prev + 1);
+        }
+    };
     useEffect(() => {
         const handleScroll = () => {
             if (window.scrollY > 20) {
@@ -140,7 +155,7 @@ export default function Welcome({ auth }) {
         <>
             <Head title="Welcome to Local Roots" />
             <div className="bg-gradient-to-br from-[#F4F9F4] via-[#E8F5E9] to-[#F1F8F1] min-h-screen text-gray-800 font-sans selection:bg-emerald-500 selection:text-white relative overflow-hidden">
-                
+
                 {/* Background blurred decorative shapes */}
                 <div className="absolute top-10 left-10 w-96 h-96 rounded-full bg-emerald-200/40 blur-3xl pointer-events-none -z-10 animate-pulse"></div>
                 <div className="absolute top-[800px] right-20 w-[500px] h-[500px] rounded-full bg-green-200/30 blur-3xl pointer-events-none -z-10"></div>
@@ -164,6 +179,7 @@ export default function Welcome({ auth }) {
                             <a href="#home" onClick={(e) => scrollToSection(e, 'home')} className="text-gray-700 hover:text-emerald-700 transition-colors">Home</a>
                             <a href="#products" onClick={(e) => scrollToSection(e, 'products')} className="text-gray-700 hover:text-emerald-700 transition-colors">Products</a>
                             <a href="#services" onClick={(e) => scrollToSection(e, 'services')} className="text-gray-700 hover:text-emerald-700 transition-colors">Services</a>
+                            <a href="#blog" onClick={(e) => scrollToSection(e, 'blog')} className="text-gray-700 hover:text-emerald-700 transition-colors">Blog</a>
                             <a href="#about" onClick={(e) => scrollToSection(e, 'about')} className="text-gray-700 hover:text-emerald-700 transition-colors">About</a>
                         </div>
 
@@ -215,6 +231,7 @@ export default function Welcome({ auth }) {
                             <a href="#home" onClick={(e) => scrollToSection(e, 'home')} className="text-gray-700 hover:text-emerald-700 transition-colors">Home</a>
                             <a href="#products" onClick={(e) => scrollToSection(e, 'products')} className="text-gray-700 hover:text-emerald-700 transition-colors">Products</a>
                             <a href="#services" onClick={(e) => scrollToSection(e, 'services')} className="text-gray-700 hover:text-emerald-700 transition-colors">Services</a>
+                            <a href="#blog" onClick={(e) => scrollToSection(e, 'blog')} className="text-gray-700 hover:text-emerald-700 transition-colors">Blog</a>
                             <a href="#about" onClick={(e) => scrollToSection(e, 'about')} className="text-gray-700 hover:text-emerald-700 transition-colors">About</a>
                             <hr className="border-emerald-100" />
                             <div className="flex flex-col gap-3">
@@ -278,7 +295,7 @@ export default function Welcome({ auth }) {
                         {/* Right Side Illustration */}
                         <div className="relative flex justify-center items-center">
                             {/* main image */}
-                            <div className="relative w-full max-w-[500px] h-[400px] rounded-[40px] overflow-hidden shadow-2xl border border-white/20 p-2 bg-white/45 backdrop-blur-[16px] border border-white/40 shadow-[0_8px_32px_0_rgba(46,125,50,0.08)]">
+                            <div className="relative w-full max-w-[500px] h-[400px] rounded-[40px] overflow-hidden p-2 bg-white/45 backdrop-blur-[16px] border border-white/20 shadow-2xl">
                                 <img
                                     src="/images/local_roots_hero.png"
                                     alt="Sustainable Farming and Products"
@@ -287,24 +304,22 @@ export default function Welcome({ auth }) {
                             </div>
 
                             {/* Floating Glassmorphism Cards */}
-                            <div className="absolute -top-6 -left-6 md:-left-12 bg-white/30 backdrop-blur-[12px] border border-white/30 shadow-[0_4px_24px_0_rgba(46,125,50,0.04)] rounded-2xl p-4 flex items-center gap-3 border border-white/40 max-w-[200px] animate-float">
-                                <span className="p-2 rounded-xl bg-emerald-100 text-emerald-800">
-                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                </span>
+                            <div className="absolute -top-6 -left-6 md:-left-12 bg-white/30 backdrop-blur-[12px] border border-white/30 shadow-[0_4px_24px_0_rgba(46,125,50,0.04)] rounded-2xl p-4 flex items-center gap-3 max-w-[200px] animate-float">                                <span className="p-2 rounded-xl bg-emerald-100 text-emerald-800">
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </span>
                                 <div>
                                     <h4 className="font-bold text-xs text-emerald-950">100% Organic</h4>
                                     <p className="text-[10px] text-gray-500">Certified local items</p>
                                 </div>
                             </div>
 
-                            <div className="absolute -bottom-6 -right-6 md:-right-10 bg-white/30 backdrop-blur-[12px] border border-white/30 shadow-[0_4px_24px_0_rgba(46,125,50,0.04)] rounded-2xl p-4 flex items-center gap-3 border border-white/40 max-w-[220px] animate-float-delayed">
-                                <span className="p-2 rounded-xl bg-emerald-100 text-emerald-800">
-                                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                                    </svg>
-                                </span>
+                            <div className="absolute -bottom-6 -right-6 md:-right-10 bg-white/30 backdrop-blur-[12px] border border-white/30 shadow-[0_4px_24px_0_rgba(46,125,50,0.04)] rounded-2xl p-4 flex items-center gap-3 max-w-[220px] animate-float-delayed">                                <span className="p-2 rounded-xl bg-emerald-100 text-emerald-800">
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                </svg>
+                            </span>
                                 <div>
                                     <h4 className="font-bold text-xs text-emerald-950">Community First</h4>
                                     <p className="text-[10px] text-gray-500">Supports family growers</p>
@@ -324,39 +339,37 @@ export default function Welcome({ auth }) {
                     </div>
 
                     {/* Large glassmorphism container */}
-                    <div className="bg-white/45 backdrop-blur-[16px] border border-white/40 shadow-[0_8px_32px_0_rgba(46,125,50,0.08)] rounded-[32px] p-8 md:p-12 border border-white/30 backdrop-blur-xl">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {products.map((product) => (
-                                <div key={product.id} className="bg-white/30 backdrop-blur-[12px] border border-white/30 shadow-[0_4px_24px_0_rgba(46,125,50,0.04)] rounded-2xl overflow-hidden border border-white/20 hover:-translate-y-2 hover:shadow-2xl hover:border-emerald-200/50 transition-all duration-300 group flex flex-col h-full bg-white/25">
-                                    <div className="h-48 overflow-hidden relative">
-                                        <img
-                                            src={product.image}
-                                            alt={product.name}
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                        />
-                                        <span className="absolute top-4 right-4 bg-emerald-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
-                                            {product.price}
-                                        </span>
+                    <div className="bg-white/45 backdrop-blur-xl border border-white/30 shadow-[0_8px_32px_0_rgba(46,125,50,0.08)] rounded-[32px] p-8 md:p-12">                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {products.map((product) => (
+                            <div key={product.id} className="bg-white/25 backdrop-blur-[12px] border border-white/20 shadow-[0_4px_24px_0_rgba(46,125,50,0.04)] rounded-2xl overflow-hidden hover:-translate-y-2 hover:shadow-2xl hover:border-emerald-200/50 transition-all duration-300 group flex flex-col h-full">                                <div className="h-48 overflow-hidden relative">
+                                <img
+                                    src={product.image}
+                                    alt={product.name}
+                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                />
+                                <span className="absolute top-4 right-4 bg-emerald-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
+                                    {product.price}
+                                </span>
+                            </div>
+                                <div className="p-6 flex flex-col justify-between flex-grow gap-4">
+                                    <div className="flex flex-col gap-2">
+                                        <h3 className="font-bold text-lg text-emerald-950 group-hover:text-emerald-800 transition-colors">
+                                            {product.name}
+                                        </h3>
+                                        <p className="text-sm text-gray-600 leading-relaxed">
+                                            {product.description}
+                                        </p>
                                     </div>
-                                    <div className="p-6 flex flex-col justify-between flex-grow gap-4">
-                                        <div className="flex flex-col gap-2">
-                                            <h3 className="font-bold text-lg text-emerald-950 group-hover:text-emerald-800 transition-colors">
-                                                {product.name}
-                                            </h3>
-                                            <p className="text-sm text-gray-600 leading-relaxed">
-                                                {product.description}
-                                            </p>
-                                        </div>
-                                        <button className="w-full py-2.5 rounded-xl border border-emerald-600/50 text-emerald-800 hover:bg-emerald-600 hover:text-white font-semibold transition-all text-sm mt-2 flex items-center justify-center gap-1.5">
-                                            View Details
-                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-                                            </svg>
-                                        </button>
-                                    </div>
+                                    <button className="w-full py-2.5 rounded-xl border border-emerald-600/50 text-emerald-800 hover:bg-emerald-600 hover:text-white font-semibold transition-all text-sm mt-2 flex items-center justify-center gap-1.5">
+                                        View Details
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                                        </svg>
+                                    </button>
                                 </div>
-                            ))}
-                        </div>
+                            </div>
+                        ))}
+                    </div>
 
                         {/* Centered button */}
                         <div className="flex justify-center mt-12">
@@ -367,8 +380,187 @@ export default function Welcome({ auth }) {
                     </div>
                 </section>
 
+                {/* Blog Section */}
+                {blogposts && blogposts.length > 0 && (
+                    <section id="blog" className="py-20 max-w-7xl mx-auto px-6 relative z-10">
+                        {/* Header Area with Page Layout Slider Controls */}
+                        <div className="flex flex-col items-center justify-center mb-16 gap-6">
+                            <div className="text-center flex flex-col gap-3">
+                                <h2 className="text-3xl md:text-4xl font-extrabold text-emerald-950">Latest from the Blog</h2>
+                                <p className="text-gray-600 max-w-2xl">
+                                    Stay updated with the latest news, farm updates, and community stories.
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Large glassmorphism container */}
+                        <div className="bg-white/45 backdrop-blur-[16px] border border-white/40 shadow-[0_8px_32px_0_rgba(46,125,50,0.08)] rounded-[32px] p-8 md:p-12">
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 transition-all duration-300">
+                                {/* Dynamically slice array items directly inline */}
+                                {blogposts.slice(currentCardStartIdx, currentCardStartIdx + cardsPerPage).map((post) => (
+                                    <div key={post.id} className="bg-white/30 backdrop-blur-[12px] border border-white/30 shadow-[0_4px_24px_0_rgba(46,125,50,0.04)] rounded-2xl overflow-hidden hover:-translate-y-2 hover:shadow-2xl hover:border-emerald-200/50 transition-all duration-300 flex flex-col h-full animate-cardFadeIn">
+                                        <div className="h-48 overflow-hidden relative bg-emerald-50">
+                                            {post.pictures && post.pictures.length > 0 ? (
+                                                <img
+                                                    src={`/storage/${post.pictures[0]}`}
+                                                    alt={post.title}
+                                                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                                                />
+                                            ) : (
+                                                <div className="w-full h-full flex items-center justify-center text-emerald-200">
+                                                    <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L28 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                    </svg>
+                                                </div>
+                                            )}
+                                            <div className="absolute top-4 left-4 bg-white/80 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-emerald-800 shadow-sm uppercase tracking-wider">
+                                                {new Date(post.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                                            </div>
+                                        </div>
+                                        <div className="p-6 flex flex-col flex-grow">
+                                            <h3 className="font-bold text-lg text-emerald-950 mb-2 line-clamp-2 leading-snug">
+                                                {post.title}
+                                            </h3>
+                                            <p className="text-sm text-gray-600 line-clamp-3 mb-6 flex-grow">
+                                                {post.description}
+                                            </p>
+                                            <div className="flex items-center justify-between pt-4 border-t border-white/40 mt-auto">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-bold text-xs">
+                                                        {post.user?.name?.charAt(0)?.toUpperCase() || "?"}
+                                                    </div>
+                                                    <span className="text-xs font-semibold text-emerald-900">
+                                                        {post.user?.name || "Author"}
+                                                    </span>
+                                                </div>
+
+                                                <button
+                                                    onClick={() => {
+                                                        setSelectedPost(post);
+                                                        setActiveImageIdx(0);
+                                                    }}
+                                                    className="px-4 py-2 text-xs font-bold text-white bg-emerald-700 hover:bg-emerald-800 rounded-xl transition-all shadow-md shadow-emerald-700/10 active:scale-95"
+                                                >
+                                                    View Post
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* See More button */}
+                            <div className="flex justify-center mt-12">
+                                <Link href={route('blogposts.index')} className="px-8 py-3.5 rounded-2xl bg-emerald-800 hover:bg-emerald-900 text-white font-semibold shadow-md shadow-emerald-900/20 hover:-translate-y-0.5 transition-all">
+                                    See More Posts
+                                </Link>
+                            </div>
+                        </div>
+
+                        {/* INTERACTIVE POPUP MODAL */}
+                        {selectedPost && (() => {
+                            const currentIdx = blogposts.findIndex(p => p.id === selectedPost.id);
+                            const hasPrev = currentIdx > 0;
+                            const hasNext = currentIdx < blogposts.length - 1;
+
+                            return (
+                                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-10 animate-fadeIn">
+                                    <div className="absolute inset-0 bg-emerald-950/40 backdrop-blur-sm" onClick={() => setSelectedPost(null)} />
+
+                                    <div className="bg-white/95 backdrop-blur-lg border border-white max-w-5xl w-full max-h-[90vh] md:max-h-[80vh] rounded-[32px] shadow-2xl overflow-hidden relative z-10 flex flex-col md:flex-row animate-scaleIn">
+                                        <button onClick={() => setSelectedPost(null)} className="absolute top-4 right-4 z-20 p-2 rounded-full bg-white/80 backdrop-blur-md border border-gray-100 text-gray-500 hover:text-gray-800 transition-all active:scale-90">
+                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
+                                        </button>
+
+                                        {/* LEFT COLUMN */}
+                                        <div className="w-full md:w-1/2 bg-emerald-950/5 p-6 flex flex-col justify-center border-b md:border-b-0 md:border-r border-gray-100 min-h-[260px] md:min-h-0">
+                                            {selectedPost.pictures && selectedPost.pictures.length > 0 ? (
+                                                <div className="flex flex-col gap-4 h-full justify-center">
+                                                    <div className="flex-grow aspect-video md:aspect-[4/3] rounded-2xl overflow-hidden bg-black/5 relative shadow-sm max-h-[300px] md:max-h-none">
+                                                        <img src={`/storage/${selectedPost.pictures[activeImageIdx]}`} alt={selectedPost.title} className="w-full h-full object-cover transition-all duration-300" />
+                                                    </div>
+                                                    {selectedPost.pictures.length > 1 && (
+                                                        <div className="flex gap-2 overflow-x-auto pb-1 snap-x hide-scrollbar px-1 justify-start">
+                                                            {selectedPost.pictures.map((pic, idx) => (
+                                                                <button key={idx} onClick={() => setActiveImageIdx(idx)} className={`w-14 h-14 md:w-16 md:h-16 flex-shrink-0 rounded-xl overflow-hidden snap-center border-2 transition-all shadow-sm ${activeImageIdx === idx ? 'border-emerald-600 scale-95 ring-4 ring-emerald-600/10' : 'border-white opacity-70'}`}>
+                                                                    <img src={`/storage/${pic}`} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
+                                                                </button>
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            ) : (
+                                                <div className="flex items-center justify-center aspect-[4/3] w-full rounded-2xl bg-emerald-50 text-emerald-200">
+                                                    <svg className="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L28 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {/* RIGHT COLUMN */}
+                                        <div className="w-full md:w-1/2 p-6 md:p-8 flex flex-col justify-between overflow-y-auto h-auto max-h-[50vh] md:max-h-none">
+                                            <div className="flex flex-col flex-grow">
+                                                <div className="text-[11px] font-bold text-emerald-700 uppercase tracking-widest mb-2 flex items-center gap-2">
+                                                    <span>Community Post</span>
+                                                    <span className="w-1 h-1 rounded-full bg-emerald-300"></span>
+                                                    <span className="text-gray-400 font-semibold">{new Date(selectedPost.created_at).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}</span>
+                                                </div>
+                                                <h2 className="text-xl md:text-2xl font-black text-emerald-950 mb-4 leading-tight">{selectedPost.title}</h2>
+                                                <div className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap pr-2 max-h-[160px] md:max-h-[260px] overflow-y-auto hide-scrollbar">
+                                                    {selectedPost.description}
+                                                </div>
+                                            </div>
+
+                                            {/* Modal Inner Controls Footer */}
+                                            <div className="flex flex-col gap-4 mt-6 pt-4 border-t border-gray-100">
+                                                <div className="flex items-center justify-between gap-4">
+                                                    <div className="flex items-center gap-2.5">
+                                                        <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-black shadow-sm text-xs">
+                                                            {selectedPost.user?.name?.charAt(0)?.toUpperCase() || "?"}
+                                                        </div>
+                                                        <span className="text-xs font-bold text-emerald-950 line-clamp-1">{selectedPost.user?.name || "Author"}</span>
+                                                    </div>
+
+                                                    <div className="flex items-center gap-2">
+                                                        <button
+                                                            onClick={() => { if (hasPrev) { setSelectedPost(blogposts[currentIdx - 1]); setActiveImageIdx(0); } }}
+                                                            disabled={!hasPrev}
+                                                            className={`p-2 rounded-xl border transition-all flex items-center justify-center ${hasPrev ? 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50 active:scale-95' : 'bg-gray-50 border-gray-100 text-gray-300 cursor-not-allowed'}`}
+                                                        >
+                                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" /></svg>
+                                                        </button>
+                                                        <button
+                                                            onClick={() => { if (hasNext) { setSelectedPost(blogposts[currentIdx + 1]); setActiveImageIdx(0); } }}
+                                                            disabled={!hasNext}
+                                                            className={`p-2 rounded-xl border transition-all flex items-center justify-center ${hasNext ? 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50 active:scale-95' : 'bg-gray-50 border-gray-100 text-gray-300 cursor-not-allowed'}`}
+                                                        >
+                                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" /></svg>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            );
+                        })()}
+
+                        {/* Global Keyframes definitions styles */}
+                        <style>{`
+                            .hide-scrollbar::-webkit-scrollbar { display: none; }
+                            .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+                            @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+                            @keyframes scaleIn { from { transform: scale(0.97); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+                            @keyframes cardFadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+                            .animate-fadeIn { animation: fadeIn 0.18s ease-out forwards; }
+                            .animate-scaleIn { animation: scaleIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+                            .animate-cardFadeIn { animation: cardFadeIn 0.25s ease-out forwards; }
+                        `}</style>
+                    </section>
+                )}
+
                 {/* Services Section */}
-                <section id="services" className="py-20 max-w-7xl mx-auto px-6 relative z-10">
+                <section id="services" className="py-20 max-w-7xl mx-auto px-6 relative">
                     <div className="text-center mb-16 flex flex-col gap-3">
                         <h2 className="text-3xl md:text-4xl font-extrabold text-emerald-950">Services</h2>
                         <p className="text-gray-600 max-w-2xl mx-auto">
@@ -381,9 +573,8 @@ export default function Welcome({ auth }) {
                         {services.map((service, index) => (
                             <div
                                 key={service.id}
-                                className={`bg-white/30 backdrop-blur-[12px] border border-white/30 shadow-[0_4px_24px_0_rgba(46,125,50,0.04)] rounded-[24px] p-8 border border-white/20 shadow-md hover:shadow-lg transition-all duration-300 flex flex-col md:items-center gap-6 ${
-                                    index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
-                                }`}
+                                className={`bg-white/30 backdrop-blur-[12px] border border-white/20 shadow-[0_4px_24px_0_rgba(46,125,50,0.04)] rounded-[24px] p-8 hover:shadow-xl transition-all duration-300 flex flex-col md:items-center gap-6 ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
+                                    }`}
                             >
                                 {/* Left/Right graphic */}
                                 <div className="flex-shrink-0 w-24 h-24 rounded-2xl bg-gradient-to-br from-emerald-500/10 to-emerald-600/20 flex items-center justify-center border border-emerald-500/10 shadow-inner">
@@ -400,20 +591,19 @@ export default function Welcome({ auth }) {
                 </section>
 
                 {/* About Section */}
-                <section id="about" className="py-20 max-w-7xl mx-auto px-6 relative z-10 mb-10">
+                <section id="about" className="py-20 max-w-7xl mx-auto px-6 relative mb-10">
                     <div className="text-center mb-12 flex flex-col gap-3">
                         <h2 className="text-3xl md:text-4xl font-extrabold text-emerald-950">About Local Roots</h2>
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-stretch">
                         {/* Left Column: Details */}
-                        <div className="bg-white/45 backdrop-blur-[16px] border border-white/40 shadow-[0_8px_32px_0_rgba(46,125,50,0.08)] rounded-[32px] p-8 md:p-10 border border-white/30 shadow-xl flex flex-col justify-between gap-8 backdrop-blur-xl bg-white/30">
-                            <div className="flex flex-col gap-4">
-                                <h3 className="text-2xl font-bold text-emerald-900">Our Mission</h3>
-                                <p className="text-gray-700 leading-relaxed">
-                                    Local Roots is dedicated to empowering local communities by promoting locally produced goods, supporting small enterprises, and creating sustainable economic opportunities.
-                                </p>
-                            </div>
+                        <div className="bg-white/45 backdrop-blur-[16px] border border-white/40 shadow-[0_8px_32px_0_rgba(46,125,50,0.08)] rounded-[32px] p-8 md:p-10 flex flex-col justify-between gap-8">                            <div className="flex flex-col gap-4">
+                            <h3 className="text-2xl font-bold text-emerald-900">Our Mission</h3>
+                            <p className="text-gray-700 leading-relaxed">
+                                Local Roots is dedicated to empowering local communities by promoting locally produced goods, supporting small enterprises, and creating sustainable economic opportunities.
+                            </p>
+                        </div>
 
                             {/* Contact Container with modern design */}
                             <div className="flex flex-col gap-4">
@@ -469,27 +659,26 @@ export default function Welcome({ auth }) {
                         </div>
 
                         {/* Right Column: Community Graphic Placeholder */}
-                        <div className="relative rounded-[32px] overflow-hidden shadow-xl border border-white/20 bg-white/45 backdrop-blur-[16px] border border-white/40 shadow-[0_8px_32px_0_rgba(46,125,50,0.08)] p-3 min-h-[300px]">
-                            <div className="w-full h-full relative rounded-[24px] overflow-hidden bg-emerald-50">
-                                <img
-                                    src="/images/local_roots_hero.png" // reused illustration for community map placeholder
-                                    alt="Local roots community map"
-                                    className="w-full h-full object-cover brightness-95"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/80 via-emerald-950/20 to-transparent flex items-end p-8">
-                                    <div className="flex flex-col gap-2">
-                                        <span className="bg-emerald-500 text-white font-bold text-xs uppercase px-2.5 py-1 rounded w-fit">Community Center Map</span>
-                                        <h4 className="text-white text-lg font-bold">Local Roots Community Center Map & Directory</h4>
-                                        <p className="text-emerald-200 text-xs leading-relaxed">Stop by our flagship location in the city plaza. Get directions, meet the growers, and pickup online orders in person.</p>
-                                    </div>
+                        <div className="relative rounded-[32px] overflow-hidden bg-white/45 backdrop-blur-[16px] border border-white/40 shadow-[0_8px_32px_0_rgba(46,125,50,0.08)] p-3 min-h-[300px]">                            <div className="w-full h-full relative rounded-[24px] overflow-hidden bg-emerald-50">
+                            <img
+                                src="/images/local_roots_hero.png" // reused illustration for community map placeholder
+                                alt="Local roots community map"
+                                className="w-full h-full object-cover brightness-95"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/80 via-emerald-950/20 to-transparent flex items-end p-8">
+                                <div className="flex flex-col gap-2">
+                                    <span className="bg-emerald-500 text-white font-bold text-xs uppercase px-2.5 py-1 rounded w-fit">Community Center Map</span>
+                                    <h4 className="text-white text-lg font-bold">Local Roots Community Center Map & Directory</h4>
+                                    <p className="text-emerald-200 text-xs leading-relaxed">Stop by our flagship location in the city plaza. Get directions, meet the growers, and pickup online orders in person.</p>
                                 </div>
                             </div>
+                        </div>
                         </div>
                     </div>
                 </section>
 
                 {/* Footer */}
-                <footer className="bg-emerald-950 text-emerald-100 py-16 relative z-10 border-t border-emerald-900/50">
+                <footer className="bg-emerald-950 text-emerald-100 py-16 relative border-t border-emerald-900/50">
                     <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12">
                         {/* Col 1: Logo and details */}
                         <div className="flex flex-col gap-4 col-span-1 md:col-span-2">
@@ -513,6 +702,7 @@ export default function Welcome({ auth }) {
                                 <a href="#home" onClick={(e) => scrollToSection(e, 'home')} className="hover:text-white transition-colors">Home</a>
                                 <a href="#products" onClick={(e) => scrollToSection(e, 'products')} className="hover:text-white transition-colors">Products</a>
                                 <a href="#services" onClick={(e) => scrollToSection(e, 'services')} className="hover:text-white transition-colors">Services</a>
+                                <a href="#blog" onClick={(e) => scrollToSection(e, 'blog')} className="hover:text-white transition-colors">Blog</a>
                                 <a href="#about" onClick={(e) => scrollToSection(e, 'about')} className="hover:text-white transition-colors">About</a>
                             </div>
                         </div>
@@ -528,13 +718,13 @@ export default function Welcome({ auth }) {
                                 </a>
                                 <a href="#" aria-label="Instagram" className="p-2.5 rounded-full bg-emerald-900/60 hover:bg-emerald-800 text-emerald-200 hover:text-white transition-all border border-emerald-900">
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                        <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
-                                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37zM17.5 6.5h.01"/>
+                                        <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37zM17.5 6.5h.01" />
                                     </svg>
                                 </a>
                                 <a href="#" aria-label="Twitter" className="p-2.5 rounded-full bg-emerald-900/60 hover:bg-emerald-800 text-emerald-200 hover:text-white transition-all border border-emerald-900">
                                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                                        <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
                                     </svg>
                                 </a>
                             </div>

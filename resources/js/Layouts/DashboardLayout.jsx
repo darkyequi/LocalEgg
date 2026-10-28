@@ -34,8 +34,13 @@ export default function DashboardLayout({ children, title }) {
 
     const adminNav = [
         { name: 'Dashboard', href: 'admin.dashboard' },
-        { name: 'Records', href: 'admin.records' },
-        { name: 'Create Batches', href: 'admin.createbatch' },
+        {
+            name: 'Manage Eggs',
+            children:[
+                { name: 'Records', href: 'admin.records' },
+                { name: 'Create Batches', href: 'admin.createbatch' },
+            ],
+        },
         {
             name: 'Manage Account',
             children: [
@@ -43,11 +48,39 @@ export default function DashboardLayout({ children, title }) {
                 { name: 'Manage Admin', href: 'admin.manageadmins' },
             ],
         },
+        {
+            name: 'Employee Management',
+            children: [
+                { name: 'Employee Register', href: 'admin.employee.register' },
+                { name: 'Attendance', href: 'admin.attendance' },
+            ],
+        },
     ];
 
     const superAdminNav = [
         { name: 'Dashboard', href: 'superadmin.dashboard' },
-        { name: 'History', href: 'superadmin.history' },
+        {
+            name: 'Manage Eggs',
+            children:[
+                { name: 'Records', href: 'superadmin.records' },
+                { name: 'Create Batches', href: 'superadmin.createbatch' },
+            ],
+        },
+        {
+            name: 'Manage Account',
+            children: [
+                { name: 'Manage User', href: 'superadmin.manageusers' },
+                { name: 'Manage Admin', href: 'superadmin.manageadmins' },
+            ],
+        },
+        {
+            name: 'Employee Management',
+            children: [
+                { name: 'Employee Register', href: 'superadmin.employee.register' },
+                { name: 'Attendance', href: 'superadmin.attendance' },
+            ],
+        },
+        {name: 'Blogpost', href: 'superadmin.blogpost'}
     ];
 
     const navigation =

@@ -1,4 +1,4 @@
-import AuthenticatedLayout from '@/Layouts/DashboardLayout';
+import DashboardLayout from '@/Layouts/DashboardLayout';
 import { Head } from '@inertiajs/react';
 import React, { useState, useMemo } from 'react';
 import {
@@ -121,7 +121,7 @@ export default function Dashboard({ totalsByYear = [], batches = [], monthlyData
 
 
     return (
-        <AuthenticatedLayout
+        <DashboardLayout
             header={
                 <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
                     Dashboard
@@ -228,9 +228,9 @@ export default function Dashboard({ totalsByYear = [], batches = [], monthlyData
 
 
 
-                        <div className="h-[300px] w-full">
+                        <div className="h-[300px] w-full min-h-[300px]">
 
-                            <ResponsiveContainer width="100%" height="100%">
+                            <ResponsiveContainer width="100%" height="100%" minHeight={1}>
 
                                 <BarChart data={chartData}>
 
@@ -288,6 +288,6 @@ export default function Dashboard({ totalsByYear = [], batches = [], monthlyData
                 
             </div>
 
-        </AuthenticatedLayout>
+        </DashboardLayout>
     );
 }
