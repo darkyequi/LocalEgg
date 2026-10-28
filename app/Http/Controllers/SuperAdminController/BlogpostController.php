@@ -41,10 +41,25 @@ class BlogpostController extends Controller
             'pictures.*' => 'image|mimes:jpg,png,jpeg|max:2048',
         ]);
 
-        $paths = [];
-        foreach ($request->file('pictures') as $picture) {
-            $paths[] = $picture->store('blogposts', 'public');
-        }
+        // Physical folder inside Laravel's public directory
+    $uploadPath = public_path('storage/blogposts');
+
+    // Create the folder if it does not exist
+    if (!File::isDirectory($uploadPath)) {
+        File::makeDirectory($uploadPath, 0755, true);
+    }
+
+    $paths = [];
+
+    foreach ($request->file('pictures') as $picture) {
+        $filename = $picture->hashName();
+
+        // Save the uploaded image directly
+        $picture->move($uploadPath, $filename);
+
+        // Keep the database path compatible with /storage/{path}
+        $paths[] = 'blogposts/' . $filename;
+    }
 
         Blogpost::create([
             'title' => $validated['title'],

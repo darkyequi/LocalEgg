@@ -1,7 +1,10 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    # Redirect all requests to the public/ folder
+    # Let storage URLs reach files in Laravel's public folder
+    RewriteRule ^storage/(.*)$ public/storage/$1 [L]
+
+    # Send other requests to Laravel's public folder
     RewriteCond %{REQUEST_URI} !^/public/
-    RewriteRule ^(.*)$ /public/$1 [L,QSA]
+    RewriteRule ^(.*)$ public/$1 [L,QSA]
 </IfModule>

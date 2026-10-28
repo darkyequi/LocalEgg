@@ -14,6 +14,7 @@ export default function BlogpostView({ blogposts = [] }) {
     const closeModal = () => {
         setSelectedPost(null);
     };
+    
 
     return (
         <>
