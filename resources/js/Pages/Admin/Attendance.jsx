@@ -176,7 +176,7 @@ export default function Attendance({ todayLogs = [], employees = [] }) {
 
                             {/* Video */}
                             <div className="relative bg-gray-900 rounded-xl overflow-hidden mb-4" style={{ aspectRatio: '4/3' }}>
-                                <video ref={videoRef} autoPlay muted className="w-full h-full object-cover" />
+                                <video ref={videoRef} autoPlay muted className="w-full h-full object-cover" style={{ transform: 'scaleX(-1)' }} />
                                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                                     <div className="w-40 h-40 border-2 border-green-400 opacity-60 rounded" />
                                 </div>
