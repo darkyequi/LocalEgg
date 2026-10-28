@@ -176,7 +176,7 @@ export default function Welcome({ auth, blogposts = [] }) {
 
                         {/* Centered navigation links */}
                         <div className="hidden md:flex items-center gap-8 font-medium">
-                            <a href="#home" onClick={(e) => scrollToSection(e, 'home')} className="text-gray-700 hover:text-emerald-700 transition-colors">Home</a>
+                            <a href="#home" onClick={(e) => scrollToSection(e, 'home')} className="text-gray-700 hover:text-emerald-700 transition-colors">Home Land</a>
                             <a href="#products" onClick={(e) => scrollToSection(e, 'products')} className="text-gray-700 hover:text-emerald-700 transition-colors">Products</a>
                             <a href="#services" onClick={(e) => scrollToSection(e, 'services')} className="text-gray-700 hover:text-emerald-700 transition-colors">Services</a>
                             <a href="#blog" onClick={(e) => scrollToSection(e, 'blog')} className="text-gray-700 hover:text-emerald-700 transition-colors">Blog</a>
